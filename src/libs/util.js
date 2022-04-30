@@ -115,7 +115,6 @@ util.initRouter = function(vm) {
       // if (!res.success) return false;
       // let menuData = res.result;
       // 当前mock菜单数据
-      console.log('读取数据')
       const menuDataMock = [
         {
           children:[{
@@ -127,22 +126,24 @@ util.initRouter = function(vm) {
               parentId: "1367044376391319552",
               path: "managerGoods",
               title: "平台商品",
-            },{
-              children: [],
-              createBy: "admin",
-              createTime: "2022-03-22 19:13:46",
-              deleteFlag: false,
-              frontRoute: "goods/goods-release/index",
-              id: "1506227631720472578",
-              level: 2,
-              name: "goods-release",
-              parentId: "1367044376391319552",
-              path: "goods-release",
-              sortOrder: 0,
-              title: "商品发布",
-              updateBy: "admin",
-              updateTime: "2022-03-23 10:39:19"
-            },{
+            },
+            // {
+            //   children: [],
+            //   createBy: "admin",
+            //   createTime: "2022-03-22 19:13:46",
+            //   deleteFlag: false,
+            //   frontRoute: "goods/goods-release/index",
+            //   id: "1506227631720472578",
+            //   level: 2,
+            //   name: "goods-release",
+            //   parentId: "1367044376391319552",
+            //   path: "goods-release",
+            //   sortOrder: 0,
+            //   title: "商品发布",
+            //   updateBy: "admin",
+            //   updateTime: "2022-03-23 10:39:19"
+            // },
+            {
               children: [],
               createBy: "admin",
               createTime: "2022-04-19 15:39:21",
@@ -239,7 +240,6 @@ util.initRouter = function(vm) {
           }
       ]
       let menuData = menuDataMock;
-      console.log('menuData',menuData)
 
       // 格式化数据，设置 空children 为 null
       for (let i = 0; i < menuData.length; i++) {
@@ -376,7 +376,6 @@ util.initRouterNode = function(routers, data) {
     menu.meta = meta;
 
     routers.push(menu);
-    console.log('routers',routers)
   }
 };
 

@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      userId:'',
       loading: false, // 加载状态
       form: {
         // 表单数据
@@ -77,18 +78,15 @@ export default {
     };
   },
   methods: {
-    afterLogin(res) {
+    afterLogin(userId) {
       // 登录成功后处理
-      let accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyQ29udGV4dCI6IntcInVzZXJuYW1lXCI6XCJhZG1pblwiLFwibmlja05hbWVcIjpcIui2hee6p-euoeeQhuWRmFwiLFwiZmFjZVwiOlwiaHR0cHM6Ly9saWxpc2hvcC1vc3Mub3NzLWNuLWJlaWppbmcuYWxpeXVuY3MuY29tL2RkZGQ2MGUxZTY5ZjQ1MjdhYzEzZGE1MzM2NWI2YzM4LnBuZ1wiLFwiaWRcIjpcIjEzMzczMDYxMTAyNzc0NzYzNTJcIixcImxvbmdUZXJtXCI6ZmFsc2UsXCJyb2xlXCI6XCJNQU5BR0VSXCIsXCJpc1N1cGVyXCI6dHJ1ZX0iLCJzdWIiOiJhZG1pbiIsImV4cCI6MTY1NDcxNDQyOX0.t5EURld9dxUR4A-9Yv2Z7TIi42UIjchn2OYDumIiELw';
-      let refreshToken = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyQ29udGV4dCI6IntcInVzZXJuYW1lXCI6XCJhZG1pblwiLFwibmlja05hbWVcIjpcIui2hee6p-euoeeQhuWRmFwiLFwiZmFjZVwiOlwiaHR0cHM6Ly9saWxpc2hvcC1vc3Mub3NzLWNuLWJlaWppbmcuYWxpeXVuY3MuY29tL2RkZGQ2MGUxZTY5ZjQ1MjdhYzEzZGE1MzM2NWI2YzM4LnBuZ1wiLFwiaWRcIjpcIjEzMzczMDYxMTAyNzc0NzYzNTJcIixcImxvbmdUZXJtXCI6ZmFsc2UsXCJyb2xlXCI6XCJNQU5BR0VSXCIsXCJpc1N1cGVyXCI6dHJ1ZX0iLCJzdWIiOiJhZG1pbiIsImV4cCI6MTY1NDcxNDQyOX0.t5EURld9dxUR4A-9Yv2Z7TIi42UIjchn2OYDumIiELw';
-      this.setStore("accessToken", accessToken);
-      this.setStore("refreshToken", refreshToken);
       // 获取用户信息
-      userInfo().then((res) => {
-        if (res.success) {
+      userInfo(userId).then((res) => {
+        console.log('用户信息',res)
+        if (res.Data) {
           // 加载菜单
-          Cookies.set("userInfoManager", JSON.stringify(res.result));
-          this.$store.commit("setAvatarPath", res.result.avatar);
+          Cookies.set("userInfoManager", JSON.stringify(res.Data));
+          // this.$store.commit("setAvatarPath", res.result.avatar);
           // util.initRouter(this);
           this.$router.push({
             name: "home_index",
@@ -102,40 +100,24 @@ export default {
       // 登录操作
       this.$refs.usernameLoginForm.validate((valid) => {
         if (valid) {
-           let accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyQ29udGV4dCI6IntcInVzZXJuYW1lXCI6XCJhZG1pblwiLFwibmlja05hbWVcIjpcIui2hee6p-euoeeQhuWRmFwiLFwiZmFjZVwiOlwiaHR0cHM6Ly9saWxpc2hvcC1vc3Mub3NzLWNuLWJlaWppbmcuYWxpeXVuY3MuY29tL2RkZGQ2MGUxZTY5ZjQ1MjdhYzEzZGE1MzM2NWI2YzM4LnBuZ1wiLFwiaWRcIjpcIjEzMzczMDYxMTAyNzc0NzYzNTJcIixcImxvbmdUZXJtXCI6ZmFsc2UsXCJyb2xlXCI6XCJNQU5BR0VSXCIsXCJpc1N1cGVyXCI6dHJ1ZX0iLCJzdWIiOiJhZG1pbiIsImV4cCI6MTY1NDcxNDQyOX0.t5EURld9dxUR4A-9Yv2Z7TIi42UIjchn2OYDumIiELw';
-      let refreshToken = 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyQ29udGV4dCI6IntcInVzZXJuYW1lXCI6XCJhZG1pblwiLFwibmlja05hbWVcIjpcIui2hee6p-euoeeQhuWRmFwiLFwiZmFjZVwiOlwiaHR0cHM6Ly9saWxpc2hvcC1vc3Mub3NzLWNuLWJlaWppbmcuYWxpeXVuY3MuY29tL2RkZGQ2MGUxZTY5ZjQ1MjdhYzEzZGE1MzM2NWI2YzM4LnBuZ1wiLFwiaWRcIjpcIjEzMzczMDYxMTAyNzc0NzYzNTJcIixcImxvbmdUZXJtXCI6ZmFsc2UsXCJyb2xlXCI6XCJNQU5BR0VSXCIsXCJpc1N1cGVyXCI6dHJ1ZX0iLCJzdWIiOiJhZG1pbiIsImV4cCI6MTY1NDcxNDQyOX0.t5EURld9dxUR4A-9Yv2Z7TIi42UIjchn2OYDumIiELw';
-      this.setStore("accessToken", accessToken);
-      this.setStore("refreshToken", refreshToken);
-      Cookies.set("userInfoManager", JSON.stringify(1234567));
-          // this.$refs.verify.init();
-          util.initRouter(this);
-          this.$router.push({
-            name: "home_index"
-          })
+          this.verifyChange()
         }
       });
     },
     verifyChange(con) {
-      // 拼图验证码回显
-      if (!con.status) return;
-
-      this.loading = true;
-
-      let fd = new FormData();
-      fd.append('username',this.form.username)
-      fd.append('password',this.md5(this.form.password))
-      login(fd)
-        .then((res) => {
-          if (res && res.success) {
-            this.afterLogin(res);
-          } else {
-            this.loading = false;
+      this.loading = true
+      const paraams={
+            LoginName:this.form.username,
+            Password:this.form.password
           }
-        })
-        .catch(() => {
-          this.loading = false;
-        });
-      this.$refs.verify.show = false;
+          login(paraams).then(res=>{
+            console.log('登录',res.Data)
+            const {Ticket,ID} = res.Data
+            this.userId = ID
+            let accessToken = Ticket
+            this.setStore("accessToken", accessToken);
+          this.afterLogin(this.userId)
+          })
     },
   },
 };

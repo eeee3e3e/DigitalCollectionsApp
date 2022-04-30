@@ -28,7 +28,11 @@ body {
   background: #f0f0f0;
   font-size: 12px;
 }
-
+.el-button--primary:focus, .el-button--primary:hover {
+    background: red !important;
+    border-color: red !important;
+    color: #FFF;
+}
 .app-main {
   width: 100%;
   height: 100%;

@@ -20,7 +20,7 @@
        @lock="lock"
        @sc="sc">
          <template slot="tableMenuLeft">
-           <el-button @click="add">添加</el-button>
+           <el-button type="primary" @click="add">添加</el-button>
          </template>
        </m-table>
      </template>

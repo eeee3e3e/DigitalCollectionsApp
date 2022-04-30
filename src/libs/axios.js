@@ -18,10 +18,9 @@ export const managerUrl =
 
 const service = axios.create({
   timeout: 8000,
-  baseURL: managerUrl
+  baseURL: 'http://82.156.240.41:9008/'
 });
 var isRefreshToken = 0;
-const refreshToken = getTokenDebounce();
 service.interceptors.request.use(
   config => {
     if (config.method == "get") {
@@ -125,50 +124,6 @@ service.interceptors.response.use(
   }
 );
 
-// 防抖闭包来一波
-function getTokenDebounce() {
-  let lock = false;
-  let success = false;
-  return function() {
-    if (!lock) {
-      lock = true;
-      let oldRefreshToken = getStore("refreshToken");
-      handleRefreshToken(oldRefreshToken)
-        .then(res => {
-          if (res.success) {
-            let { accessToken, refreshToken } = res.result;
-            setStore("accessToken", accessToken);
-            setStore("refreshToken", refreshToken);
-
-            success = true;
-            lock = false;
-          } else {
-            success = false;
-            lock = false;
-            router.push("/login");
-          }
-        })
-        .catch(err => {
-          success = false;
-          lock = false;
-        });
-    }
-    return new Promise(resolve => {
-      // 一直看lock,直到请求失败或者成功
-      const timer = setInterval(() => {
-        if (!lock) {
-          clearInterval(timer);
-          if (success) {
-            resolve("success");
-          } else {
-            resolve("fail");
-          }
-        }
-      }, 500); // 轮询时间间隔
-    });
-  };
-}
-
 export const getRequest = (url, params) => {
   let accessToken = getStore("accessToken");
   return service({
@@ -176,6 +131,7 @@ export const getRequest = (url, params) => {
     url: `${url}`,
     params: params,
     headers: {
+      "Content-Type": "multipart/form-data",
       accessToken: accessToken
     }
   });
@@ -204,7 +160,7 @@ export const postRequest = (url, params, headers) => {
           }
         ],
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Type": "application/json",
       accessToken: accessToken,
       ...headers
     }
@@ -234,7 +190,7 @@ export const postRequestWithNoForm = (url, params) => {
 
 //     headers: {
 //       accessToken: accessToken,
-//       "Content-Type": "application/x-www-form-urlencoded"
+//       "Content-Type": "application/json"
 //     }
 //   });
 // };
@@ -262,7 +218,7 @@ export const putRequest = (url, params, headers) => {
           }
         ],
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Type": "application/json",
       accessToken: accessToken,
       ...headers
     }
@@ -346,7 +302,7 @@ export const postRequestWithNoToken = (url, params) => {
 
 /**
  * 无需token验证的请求 避免旧token过期导致请求失败
- * @param {*} url 
+ * @param {*} url
  * @param {*} params
  */
 export const postRequestWithNoTokenData = (url, params) => {
@@ -354,7 +310,7 @@ export const postRequestWithNoTokenData = (url, params) => {
     method: "post",
     url: `${url}`,
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/json"
     },
     data: params
   });

@@ -30,7 +30,7 @@
   </el-form-item>
   <el-form-item style="text-align:center;">
     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-    <el-button @click="handleClose">取消</el-button>
+    <el-button type="primary" @click="handleClose">取消</el-button>
   </el-form-item>
 </el-form>
 </el-dialog>

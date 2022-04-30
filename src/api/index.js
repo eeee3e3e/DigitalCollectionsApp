@@ -48,7 +48,7 @@ export const getNoticePage = (params) => {
 
 // 登陆
 export const login = (params) => {
-  return postRequestWithNoTokenData("/passport/user/login", params);
+  return postRequestWithNoTokenData("api/UserInfo/LoginByLoginname", params);
 };
 
 // 登出
@@ -61,8 +61,8 @@ export const handleRefreshToken = (token) => {
   return getRequestWithNoToken(`/passport/user/refresh/${token}`);
 };
 // 获取用户登录信息
-export const userInfo = (params) => {
-  return getRequest("/passport/user/info", params);
+export const userInfo = (userId) => {
+  return getRequest(`/api/UserInfo/GetUser?userId=${userId}`);
 };
 // 注册
 export const regist = (params) => {

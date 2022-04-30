@@ -1,5 +1,5 @@
 <template>
-<el-dialog title="编辑" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false" append-to-body :close-on-press-escape="false" :before-close="handleClose">
+<el-dialog :title="title" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false" append-to-body :close-on-press-escape="false" :before-close="handleClose">
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
   <el-form-item label="商品名称">
     <el-input v-model="ruleForm.name"></el-input>
@@ -86,7 +86,7 @@
   </el-form-item>
   <el-form-item style="text-align:center;">
     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-    <el-button @click="handleClose">取消</el-button>
+    <el-button type="primary" @click="handleClose">取消</el-button>
   </el-form-item>
 </el-form>
 </el-dialog>
@@ -98,6 +98,10 @@ export default {
     showAddDialog: {
       type:Boolean,
       default:false
+    },
+    title:{
+      type:String,
+      default:''
     }
   },
   data () {

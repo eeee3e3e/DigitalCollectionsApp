@@ -20,11 +20,12 @@
        @lock="lock"
        @sc="sc">
          <template slot="tableMenuLeft">
+           <el-button type="primary" size="small" @click="addShop">添加商品</el-button>
          </template>
        </m-table>
      </template>
    </table-page>
-      <edit-shop :showAddDialog="showAddDialog" @close="close"></edit-shop>
+      <edit-shop :showAddDialog="showAddDialog" @close="close" :title="title" :content="content"></edit-shop>
    </div>
 </template>
 <script>
@@ -34,6 +35,8 @@ export default {
   components:{search,editShop},
   data () {
     return {
+      content:{},
+      title:'',
       showAddDialog:false,
       loading:false,
       refreshDom:+new Date(),
@@ -53,6 +56,11 @@ export default {
     this.getList()
   },
   methods: {
+    addShop () {
+      this.title = '新增'
+      this.content = {}
+      this.showAddDialog = true
+    },
     close () {
       this.showAddDialog = false
     },
@@ -85,7 +93,9 @@ export default {
     yjqc () {
 
     },
-    edit () {
+    edit (row) {
+      this.content = row
+      this.title = '编辑'
       this.showAddDialog = true
     },
     lock () {

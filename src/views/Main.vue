@@ -7,7 +7,7 @@
     <div class="sidebar-menu-con menu-bar">
       <div class="logo-con">
         <!-- <img src="../assets/logo.png" key="max-logo" /> -->
-        <H1>LOGO</H1>
+        <H1>城市数藏</H1>
       </div>
       <shrinkable-menu></shrinkable-menu>
     </div>
@@ -25,18 +25,18 @@
             <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
               <Dropdown transfer trigger="hover" @on-click="handleClickUserDropdown">
                 <div class="dropList">
-                  <span class="main-user-name">{{ userInfo.nickName }}</span>
+                  <span class="main-user-name">{{ userInfo.UserName }}</span>
                   <Icon type="md-arrow-dropdown" />
-                  <!-- <Avatar
-                    :src="avatarPath"
+                  <Avatar
+                    :src="userInfo.UserHead"
                     style="background: #fff; margin-left: 10px"
-                  ></Avatar> -->
+                  ></Avatar>
                 </div>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="personalCenter">{{
+                  <!-- <DropdownItem name="personalCenter">{{
                     $t("userCenter")
                   }}</DropdownItem>
-                  <DropdownItem name="changePass">{{ $t("changePass") }}</DropdownItem>
+                  <DropdownItem name="changePass">{{ $t("changePass") }}</DropdownItem> -->
                   <DropdownItem name="loginOut" divided>{{ $t("logout") }}</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
