@@ -7,8 +7,8 @@
       <el-input style="width:220px" size="small"></el-input>
     </el-form-item>
    <el-form-item label="状态" label-width="180px">
-      <el-select style="width:220px" size="small" placeholder="请选择">
-        <el-option v-for="item in list" :key="item.value" :label="item.lable" :value="item.value"
+      <el-select style="width:220px" size="small" placeholder="请选择" v-model="value">
+        <el-option v-for="item in options" :key="item.value" :label="item.lable" :value="item.value"
         ></el-option>
       </el-select>
     </el-form-item>
@@ -23,10 +23,11 @@ export default {
   name:'search',
   data () {
     return {
+      value:'',
       queryParams:{
 
       },
-      list:[{
+      options:[{
         lable:'上架',
         value:'1'
         },

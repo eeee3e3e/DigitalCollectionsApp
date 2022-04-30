@@ -128,13 +128,12 @@ export default {
       }
       // 退出登录
       else if (name === "loginOut") {
-        logout().then((res) => {
+        // logout().then((res) => {
           this.$store.commit("logout", this);
           this.$store.commit("setAdded", false);
           this.setStore("accessToken", "");
-          this.setStore("refreshToken", "");
           this.$router.push({ path: "/login" });
-        });
+        // });
       }
     },
     //切换标签

@@ -3,6 +3,7 @@ import {
   getRequest,
   postRequest,
   putRequest,
+  postUploadRequest,
   deleteRequest,
   importRequest,
   getRequestWithNoToken,
@@ -46,11 +47,14 @@ export const getNoticePage = (params) => {
   return getRequest("/statistics/index/notice", params);
 };
 
-// 登陆
+// 城市数藏登陆
 export const login = (params) => {
   return postRequestWithNoTokenData("api/UserInfo/LoginByLoginname", params);
 };
-
+// 城市数藏附件上传
+export const uploadCity = (params) => {
+  return postUploadRequest(`/api/UploadFile/UploadFileBack?path=/image/${params}`);
+};
 // 登出
 export const logout = () => {
   return postRequest("/passport/user/logout");

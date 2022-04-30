@@ -92,6 +92,8 @@
 </el-dialog>
 </template>
 <script>
+// uploadCity
+import { uploadCity } from "@/api/index";
 export default {
   name:'editShop',
   props:{
@@ -166,9 +168,13 @@ export default {
 
     },
     UploadImage(file,filelist) {
-      //console.log(file);
+      console.log(file);
       let fd = new FormData()
       fd.append('file', file.raw) //传给后台接收的名字 file
+
+      uploadCity(file.name).then(res=>{
+        console.log('附件接口',res)
+      })
       // axios.post('/upload/image', fd, {headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
       //   //上传成功后返回的数据,
       //   console.log("上传图片到:"+response.data);

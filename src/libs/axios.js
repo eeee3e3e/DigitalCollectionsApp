@@ -7,18 +7,15 @@ import { handleRefreshToken } from "../api/index";
 import {v4 as uuidv4} from 'uuid';
 
 // 统一请求路径前缀
-export const commonUrl =
-  process.env.NODE_ENV === "development"
-    ? BASE.API_DEV.common
-    : BASE.API_PROD.common;
+console.log('===',process.env.NODE_ENV)
 export const managerUrl =
   (process.env.NODE_ENV === "development"
     ? BASE.API_DEV.manager
-    : BASE.API_PROD.manager) + BASE.PREFIX;
+    : BASE.API_PROD.manager);
 
 const service = axios.create({
-  timeout: 8000,
-  baseURL: 'http://82.156.240.41:9008/'
+  timeout: 3000,
+  baseURL: managerUrl
 });
 var isRefreshToken = 0;
 service.interceptors.request.use(
@@ -136,7 +133,18 @@ export const getRequest = (url, params) => {
     }
   });
 };
-
+export const postUploadRequest = (url, params) =>{
+  let accessToken = getStore("accessToken");
+  return service({
+    method: "post",
+    url: `${url}`,
+    data: params,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Authorization":`authorization ${accessToken}`
+    }
+  });
+}
 export const postRequest = (url, params, headers) => {
   let accessToken = getStore("accessToken");
   return service({
