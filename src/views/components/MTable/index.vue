@@ -16,6 +16,9 @@
       :stripe ="true"
       fit
       border class="table-class" :height="height || autoComputeHeight" :row-key="rowKey" :selection-change="selectionChange">
+      <template>
+        <div slot="empty" style="text-align: left;">暂无数据</div>
+      </template>
       <!-- // 选择列 配置options.selection为true -->
         <el-table-column v-if="selection" header-align="center" align="center" type="selection" label="选择" fixed="left" width="55" :reserve-selection="true" />
         <!-- 序列号配置 -->

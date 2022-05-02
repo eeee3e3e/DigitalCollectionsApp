@@ -23,7 +23,7 @@
            <el-button type="primary" size="small" @click="addShop">添加商品</el-button>
          </template>
          <template slot="FrontImage" slot-scope="scope">
-           <div style="width:146px;height:80px;object-fit: cover; width: auto;">
+           <div class="imgbox">
               <img class="img" :src="`http://82.156.240.41:9008/${scope.row.FrontImage}`" alt="">
            </div>
          </template>
@@ -209,11 +209,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+ .imgbox{
+   background: #FFFFFF;
+	width: 220px;
+	height: 100px;
+	overflow: hidden;//img如果超出这个div会隐藏超出部分
+	display: flex;//flex布局
+	align-items: center;//让img放在div的中间，居中
+ }
 .img{
   width:auto;
-        height:auto;
-        max-width:100%;
-        max-height:100%;
+        width:100%;
         object-fit:cover;
 }
  /deep/ .el-radio__input.is-checked+.el-radio__label {

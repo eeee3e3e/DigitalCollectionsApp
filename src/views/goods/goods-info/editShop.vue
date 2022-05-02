@@ -167,10 +167,10 @@ export default {
         },
         rules: {
            SaleModeID: [
-            { required: true, message: '请选择售卖方式', trigger: 'change' }
+            { required: true, message: '请选择售卖方式', trigger: 'blur' }
           ],
            CommodityTypeID: [
-            { required: true, message: '请选择商品类型', trigger: 'change' }
+            { required: true, message: '请选择商品类型', trigger: 'blur' }
           ],
           Name: [
             { required: true, message: '请输入商品名称', trigger: 'blur' }
