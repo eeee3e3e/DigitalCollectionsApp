@@ -54,7 +54,7 @@
   <el-form-item label="售卖结束时间" prop="EndDateTime">
      <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="testend" :value="ruleForm.EndDateTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
   </el-form-item>
-  <el-form-item label="封面" prop="AttachmentList">
+  <el-form-item label="封面" prop="FrontImage">
     <el-upload
      :disabled="this.title === '查看商品详情'"
             ref="uploads"

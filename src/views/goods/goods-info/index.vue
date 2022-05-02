@@ -89,6 +89,7 @@ export default {
       this.getList()
     },
     closes () {
+      this.commodityID = ''
       this.showAddDialog = false
       this.showAddDialogs = false
     },

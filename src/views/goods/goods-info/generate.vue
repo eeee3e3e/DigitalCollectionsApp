@@ -20,8 +20,8 @@
              <!-- <el-form-item v-if="this.radio === '2'" label="生成数量" prop="CommodityID">
               <el-input v-model="ruleForm.CommodityID"></el-input>
             </el-form-item> -->
-            <div style="width:100%;text-align:right;">
-              <el-button style="margin-top:25px;" type="primary" @click="submitForm('ruleForm')">提交</el-button>
+            <div style="width:100%;text-align:right;margin-top:35px">
+              <el-button v-if="radio=== '2'"  type="primary" @click="submitForm('ruleForm')">提交</el-button>
               <el-button type="primary" @click="handleClose">取消</el-button>
             </div>
   </el-form-item>
@@ -48,7 +48,7 @@ export default {
       radio:'1',
       dialogVisible:false,
       ruleForm:{
-        fileList:[],
+        fileList:'',
         CommodityID:''
       },
       rules: {
@@ -74,7 +74,7 @@ export default {
     radio_change (v) {
     },
        handleClose () {
-         this.ruleForm.fileList = []
+         this.ruleForm.fileList = ''
           this.ruleForm.CommodityID = ''
         this.dialogVisible = false
         this.$emit('closes')
@@ -82,21 +82,23 @@ export default {
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-           if (this.radio === '1') {
-          this.ruleForm.fileList = []
-          this.ruleForm.CommodityID = ''
-           this.commodityID = ''
-           this.fileList = []
-          this.dialogVisible = false
-      }
         if (this.radio === '2') {
           CreateCommodityDetailsSingle({commodityID:this.commodityID}).then(res=>{
-            if (res.Data) {
-              this.commodityID = ''
+            if (res.ReturnCode === '200') {
                this.ruleForm.CommodityID = ''
                 this.dialogVisible = false
                 const file = `${BASE.API_DEV.manager}${res.Data}`
                this.download('一码一兑',file)
+                this.$emit('closes')
+            } else {
+              this.radio === '1'
+                this.$message({
+              message: res.ReturnMessage,
+              type: 'error'
+        });
+                this.ruleForm.CommodityID = ''
+                this.dialogVisible = false
+              this.$emit('closes')
             }
           })
         }
@@ -111,7 +113,22 @@ export default {
       let fd = new FormData()
       fd.append('files', file.raw)
       CreateCommodityDetailsMultiple(this.commodityID,fd).then(res=>{
-        this.radio = '1'
+        if (res.ReturnCode === '200') {
+          this.radio = '1'
+        this.ruleForm.fileList= res.Data
+        }else {
+          this.ruleForm.fileList = ''
+              this.radio === '1'
+          this.fileList = []
+            this.dialogVisible = false
+          this.$emit('closes')
+          this.$message({
+              message: res.ReturnMessage,
+              type: 'error'
+        });
+        }
+      }).catch(res=>{
+
       })
 
     },
