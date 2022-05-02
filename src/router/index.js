@@ -12,7 +12,6 @@ const RouterConfig = {
   mode: 'history',
   routes: routers
 };
-console.log('----------------',RouterConfig.routes)
 /**
  * 解决重复点击菜单会控制台报错bug
  */

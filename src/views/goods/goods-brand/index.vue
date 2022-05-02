@@ -29,6 +29,9 @@
             <el-tag v-if="scope.row.Status === 'enable'"  type="success">启用</el-tag>
             <el-tag v-if="scope.row.Status === 'disable'" type="danger">禁用</el-tag>
          </template>
+         <template slot="LinkUrl" slot-scope="scope">
+              <div @click="Link(scope.row.LinkUrl)">{{scope.row.LinkUrl}}</div>
+         </template>
        </m-table>
      </template>
    </table-page>
@@ -67,6 +70,9 @@ export default {
     this.getList()
   },
   methods: {
+    Link (url) {
+      window.open(`https://${url}`, '_blank');
+    },
     close () {
       this.showAddDialog = false
       this.content = {}
@@ -144,7 +150,7 @@ export default {
       return [
         {label:'Banner名称',prop:'Name'},
         {label:'Banner类别',prop:'Category'},
-        {label:'跳转链接',prop:'LinkUrl'},
+        {label:'跳转链接',prop:'LinkUrl',slot:true},
         {label:'图片地址',prop:'ImgUrl',slot:true},
         {label:'状态',prop:'Status',slot:true},
         {label:'创建人',prop:'CreateUserID'},
