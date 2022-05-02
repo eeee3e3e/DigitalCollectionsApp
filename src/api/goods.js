@@ -46,6 +46,10 @@ export const DeleteCommodityDetails = (ids) =>{
 export const CommodityOffLine = (params) => {
   return postRequest(`/api/Commodity/CommodityOffLine/?id=${params}`)
 }
+// 商品shang架
+export const CommodityOnLine = (params) => {
+  return postRequest(`/api/Commodity/CommodityOnLine/?id=${params}`)
+}
 //  添加
 export const addBrand = (params) => {
     return postRequest('/goods/brand', params)

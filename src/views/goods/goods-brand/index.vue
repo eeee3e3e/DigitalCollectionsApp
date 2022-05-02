@@ -26,8 +26,8 @@
            </div>
          </template>
           <template slot="Status" slot-scope="scope">
-           <div v-if="scope.row.Status === 'enable'">启用</div>
-           <div v-if="scope.row.Status === 'disable'">禁用</div>
+            <el-tag v-if="scope.row.Status === 'enable'"  type="success">启用</el-tag>
+            <el-tag v-if="scope.row.Status === 'disable'" type="danger">禁用</el-tag>
          </template>
        </m-table>
      </template>

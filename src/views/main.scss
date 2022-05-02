@@ -329,3 +329,11 @@
   z-index: 100;
   top: 1px;
 }
+.el-table__body-wrapper::-webkit-scrollbar {
+  width: 8px; /*滚动条宽度*/
+  height: 8px; /*滚动条高度*/
+}
+.el-button--primary.is-disabled{
+  background-color: red !important;
+  border-color: red !important;
+}

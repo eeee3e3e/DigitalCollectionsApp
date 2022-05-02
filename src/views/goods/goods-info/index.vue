@@ -7,7 +7,7 @@
      </template>
      <!-- 表格主体 -->
      <template slot="table">
-       <m-table v-loading="loading" selection hideRightMenu :data="data" :headers="tableHeaders"
+       <m-table v-loading="loading"  hideRightMenu :data="data" :headers="tableHeaders"
        :rowKey="+new Date() + ''"
        :pageKey="'pageIndex'"
        :limitKey="'pageSize'"
@@ -23,8 +23,8 @@
            <el-button type="primary" size="small" @click="addShop">添加商品</el-button>
          </template>
          <template slot="FrontImage" slot-scope="scope">
-           <div style="width:80px;height:80px">
-              <img :src="`http://82.156.240.41:9008/${scope.row.FrontImage}`" alt="">
+           <div style="width:146px;height:80px;object-fit: cover; width: auto;">
+              <img class="img" :src="`http://82.156.240.41:9008/${scope.row.FrontImage}`" alt="">
            </div>
          </template>
          <template slot="AttachmentList" slot-scope="scope">
@@ -47,7 +47,7 @@
 import search from './search'
 import editShop from './editShop'
 import generate from './generate'
-import { GetCommodityListBack,CommodityOffLine } from "@/api/goods.js";
+import { GetCommodityListBack,CommodityOffLine,CommodityOnLine } from "@/api/goods.js";
 export default {
   components:{search,editShop,generate},
   data () {
@@ -69,7 +69,7 @@ export default {
       queryParams:{},
       showSearch:true,
       expandSearch:true,
-      data:[]
+      data:[],
     }
   },
   mounted () {
@@ -108,7 +108,10 @@ export default {
           console.log('数据',res)
           this.data = res.Data.map(val=>({
           ...val,
-          actions:[{label:'下架',handleClickName:'down'},
+          actions: val.Status === 'online' ? [{label:'下架',handleClickName:'down'},
+          {label:'编辑',handleClickName:'edit'},
+          {label:'查看',handleClickName:'save'},
+          {label:'生成',handleClickName:'generate'},] :[{label:'上架',handleClickName:'shelves'},
           {label:'编辑',handleClickName:'edit'},
           {label:'查看',handleClickName:'save'},
           {label:'生成',handleClickName:'generate'},]
@@ -120,18 +123,21 @@ export default {
       // })
     },
     // 上架
-    shelves () {
-
+    shelves (row) {
+      CommodityOnLine(row.ID).then(res=>{
+         this.getList()
+      })
     },
     //生成
     generate (row) {
-      console.log('row',row)
       this.commodityID = row.ID
       this.showAddDialogs = true
     },
     // 查看
-    save () {
-
+    save (row) {
+      this.content = row
+      this.title = '查看商品详情'
+      this.showAddDialog = true
     },
     // 下架
     down (row) {
@@ -178,7 +184,7 @@ export default {
         {label:'商品编号',prop:'Code'},
         {label:'价格',prop:'Price'},
         {label:'限量',prop:'LimitNum'},
-        {label:'库存',prop:'stockNum'},
+        {label:'库存',prop:'StockNum'},
         {label:'创建时间',prop:'CreateDateTime'},
         {label:'售卖开始时间',prop:'StartDateTime'},
         {label:'预售结束时间',prop:'EndDateTime'},
@@ -193,7 +199,7 @@ export default {
         {label:'品牌方名称',prop:'BrandName'},
         {label:'系列',prop:'SerialType'},
         {label:'商品图片',prop:'AttachmentList',slot:true},
-        {label:'操作',prop:'actions',fixed:'right',width:320},
+        {label:'操作',prop:'actions',fixed:'right',width:220},
       ]
     },
     // tableRowKeys () {
@@ -203,6 +209,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.img{
+  width:auto;
+        height:auto;
+        max-width:100%;
+        max-height:100%;
+        object-fit:cover;
+}
  /deep/ .el-radio__input.is-checked+.el-radio__label {
     color: red !important;
 }

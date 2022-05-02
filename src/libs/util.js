@@ -208,36 +208,36 @@ util.initRouter = function(vm) {
           path: "null",
           sortOrder: 1,
           title: "商品"},
-          {
-          frontRoute: "null",
-          level: 0,
-          id: "1367039950367700768",
-          name: "order",
-          parentId: "01",
-          path: "null",
-          sortOrder: 2,
-          title: "订单",
-          updateTime: "2022-04-19 09:49:05",
-          children:[{
-            children: [{
-              children: [],
-              frontRoute: "order/order-shop/index",
-              id: "1367045529331161952",
-              name: "orderShop",
-              level: 2,
-              parentId: "13670455297211619552",
-              path: 'orderShop',
-              title: "商品订单",
-            }],
-            frontRoute: "Main",
-            id: "13670455297211619552",
-            name: "order",
-            level: 1,
-            parentId: "1367039950367700768",
-            path: '/',
-            title: "订单",
-          }]
-          }
+          // {
+          // frontRoute: "null",
+          // level: 0,
+          // id: "1367039950367700768",
+          // name: "order",
+          // parentId: "01",
+          // path: "null",
+          // sortOrder: 2,
+          // title: "订单",
+          // updateTime: "2022-04-19 09:49:05",
+          // children:[{
+          //   children: [{
+          //     children: [],
+          //     frontRoute: "order/order-shop/index",
+          //     id: "1367045529331161952",
+          //     name: "orderShop",
+          //     level: 2,
+          //     parentId: "13670455297211619552",
+          //     path: 'orderShop',
+          //     title: "商品订单",
+          //   }],
+          //   frontRoute: "Main",
+          //   id: "13670455297211619552",
+          //   name: "order",
+          //   level: 1,
+          //   parentId: "1367039950367700768",
+          //   path: '/',
+          //   title: "订单",
+          // }]
+          // }
       ]
       let menuData = menuDataMock;
 

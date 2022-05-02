@@ -2,7 +2,7 @@
 <el-dialog :title="title" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false" append-to-body :close-on-press-escape="false" :before-close="handleClose">
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
     <el-form-item v-if="title === '新增'" label="商品类型" prop="CommodityTypeID">
-     <el-select style="width:100%" v-model="ruleForm.CommodityTypeID" placeholder="请选择">
+     <el-select  :disabled="this.title === '查看商品详情'" style="width:100%" v-model="ruleForm.CommodityTypeID" placeholder="请选择">
     <el-option
       v-for="item in optionsCommodityTypeID"
       :key="item.ID"
@@ -12,7 +12,7 @@
   </el-select>
   </el-form-item>
   <el-form-item v-if="title === '新增'" label="售卖方式" prop="SaleModeID">
-    <el-select style="width:100%" v-model="ruleForm.SaleModeID" placeholder="请选择">
+    <el-select  :disabled="this.title === '查看商品详情'" style="width:100%" v-model="ruleForm.SaleModeID" placeholder="请选择">
     <el-option
       v-for="item in optionsSaleModeID"
       :key="item.ID"
@@ -22,37 +22,41 @@
   </el-select>
   </el-form-item>
   <el-form-item label="商品名称" prop="Name">
-    <el-input v-model="ruleForm.Name"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.Name"></el-input>
   </el-form-item>
   <el-form-item label="商品价格" prop="Price">
-    <el-input v-model="ruleForm.Price"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.Price"></el-input>
   </el-form-item>
   <el-form-item label="限量" prop="LimitNum">
-    <el-input v-model="ruleForm.LimitNum"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.LimitNum"></el-input>
   </el-form-item>
    <el-form-item label="系列" prop="SerialType">
-    <el-input v-model="ruleForm.SerialType"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.SerialType"></el-input>
   </el-form-item>
   <el-form-item label="品牌方名称" prop="BrandName">
-    <el-input v-model="ruleForm.BrandName"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.BrandName"></el-input>
   </el-form-item>
    <el-form-item label="创作方姓名" prop="AuthorName">
-    <el-input v-model="ruleForm.AuthorName"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.AuthorName"></el-input>
   </el-form-item>
     <el-form-item label="发行方名称" prop="ReleaseUserName">
-    <el-input v-model="ruleForm.ReleaseUserName"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.ReleaseUserName"></el-input>
   </el-form-item>
    <el-form-item label="购买须知" prop="PurchaseNote">
-    <el-input v-model="ruleForm.PurchaseNote"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.PurchaseNote"></el-input>
+  </el-form-item>
+  <el-form-item label="商品库存" v-if="this.title === '查看商品详情'">
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.StockNum"></el-input>
   </el-form-item>
   <el-form-item label="售卖开始时间" prop="StartDateTime">
-    <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="teststart" :value="ruleForm.StartDateTime"  placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+    <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="teststart" :value="ruleForm.StartDateTime"  placeholder="选择日期和时间" style="width: 200px"></Date-picker>
   </el-form-item>
   <el-form-item label="售卖结束时间" prop="EndDateTime">
-     <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="testend" :value="ruleForm.EndDateTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+     <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="testend" :value="ruleForm.EndDateTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
   </el-form-item>
   <el-form-item label="封面" prop="AttachmentList">
     <el-upload
+     :disabled="this.title === '查看商品详情'"
             ref="uploads"
             action=""
             list-type="picture-card"
@@ -76,6 +80,7 @@
   </el-form-item>
    <el-form-item label="商品图片" prop="AttachmentList">
           <el-upload
+           :disabled="this.title === '查看商品详情'"
             ref="upload"
             action=""
             list-type="picture-card"
@@ -97,10 +102,10 @@
       </el-dialog>
   </el-form-item>
   <el-form-item label="描述信息" prop="Description">
-    <el-input type="textarea" v-model="ruleForm.Description"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情'" type="textarea" v-model="ruleForm.Description"></el-input>
   </el-form-item>
   <el-form-item style="text-align:center;">
-    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+    <el-button type="primary"  :disabled="this.title === '查看商品详情'" @click="submitForm('ruleForm')">提交</el-button>
     <el-button type="primary" @click="handleClose">取消</el-button>
   </el-form-item>
 </el-form>
@@ -141,6 +146,7 @@ export default {
       dialogVisible: false,
       ruleForm: {
           ID:'',
+          StockNum:'',
           SaleModeID:'',
           CommodityTypeID:'',
           FrontImage:'',
@@ -296,23 +302,12 @@ export default {
         // this.$refs['ruleForm'].resetFields()
          this.FrontImage = []
           this.AttachmentList = []
-          this.ruleForm.ID ='',
-          this.ruleForm.SaleModeID ='',
-          this.ruleForm.CommodityTypeID ='',
-          this.ruleForm.FrontImage ='',
-          this.ruleForm.Name = '',
-          this.ruleForm.Price = '',
-          this.ruleForm.LimitNum = '',
-          this.ruleForm.Price = '',
-          this.ruleForm.Description = '',
-          this.ruleForm.AttachmentList = [],
-          this.ruleForm.PurchaseNote = '',
-          this.ruleForm.ReleaseUserName = '',
-          this.ruleForm.AuthorName ='',
-          this.ruleForm.BrandName ='',
-          this.ruleForm.SerialType ='',
-          this.ruleForm.StartDateTime ='',
-          this.ruleForm.EndDateTime =''
+          for (let i in  this.ruleForm) {
+            if (i !== 'AttachmentList') {
+              this.ruleForm[i] = ''
+              this.ruleForm.AttachmentList = []
+            }
+          }
         this.dialogVisible = false
         this.$emit('close')
       }
@@ -320,7 +315,7 @@ export default {
   watch :{
     showAddDialog (val) {
       if (val) {
-        if (this.title === '编辑') {
+        if (this.title === '编辑' || this.title === '查看商品详情') {
           this.ruleForm = {...this.content}
           this.AttachmentList = []
           if (this.content.FrontImage !=='' && this.content.FrontImage !=='string') {
@@ -336,25 +331,15 @@ export default {
           // console
           this.dialogVisible = true
         } else {
+
           this.FrontImage = []
           this.AttachmentList = []
-          this.ruleForm.ID ='',
-          this.ruleForm.SaleModeID ='',
-          this.ruleForm.CommodityTypeID ='',
-          this.ruleForm.FrontImage ='',
-          this.ruleForm.Name = '',
-          this.ruleForm.Price = '',
-          this.ruleForm.LimitNum = '',
-          this.ruleForm.Price = '',
-          this.ruleForm.Description = '',
-          this.ruleForm.AttachmentList = [],
-          this.ruleForm.PurchaseNote = '',
-          this.ruleForm.ReleaseUserName = '',
-          this.ruleForm.AuthorName ='',
-          this.ruleForm.BrandName ='',
-          this.ruleForm.SerialType ='',
-          this.ruleForm.StartDateTime ='',
-          this.ruleForm.EndDateTime =''
+          for (let i in  this.ruleForm) {
+            if (i !== 'AttachmentList') {
+              this.ruleForm[i] = ''
+              this.ruleForm.AttachmentList = []
+            }
+          }
           this.dialogVisible = true
         }
       }
@@ -368,4 +353,9 @@ export default {
     background: red;
     border-color: red;
   }
+   /deep/ .el-button--primary.is-disabled, .el-button--primary.is-disabled:active, .el-button--primary.is-disabled:focus, .el-button--primary.is-disabled:hover {
+    color: #FFF;
+    background-color: red !important;
+    border-color: red !important;
+}
 </style>
