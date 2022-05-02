@@ -318,7 +318,7 @@ export default {
         if (this.title === '编辑' || this.title === '查看商品详情') {
           this.ruleForm = {...this.content}
           this.AttachmentList = []
-          if (this.content.FrontImage !=='' && this.content.FrontImage !=='string') {
+          if (this.content.FrontImage !=='') {
             this.FrontImage = [{url:''}]
              this.FrontImage[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
           } else {

@@ -161,7 +161,7 @@ export default {
         if (this.title === '编辑') {
           this.ruleForm = {...this.content}
           this.ImgUrl = []
-          if (this.content.ImgUrl !== '' && this.content.ImgUrl !== 'string') {
+          if (this.content.ImgUrl !== '') {
             this.ImgUrl = [{url:''}]
              this.ImgUrl[0].url = `${BASE.API_DEV.manager}${this.content.ImgUrl}`
           } else {
