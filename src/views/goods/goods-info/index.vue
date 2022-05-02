@@ -33,8 +33,8 @@
            </div>
          </template>
          <template slot="Status" slot-scope="scope">
-           <div v-if="scope.row.Status === 'online'">正常</div>
-           <div v-if="scope.row.Status === 'offline'">下架</div>
+            <el-tag v-if="scope.row.Status === 'online'"  type="success">正常</el-tag>
+            <el-tag v-if="scope.row.Status === 'offline'" type="danger">下架</el-tag>
          </template>
        </m-table>
      </template>
