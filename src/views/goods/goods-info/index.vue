@@ -91,14 +91,6 @@ export default {
     // 获取数据
     getList () {
       this.loading = true
-      // getList().then(res=>{
-        // const {items} =res
-        // this.data = items.map(val=>({
-        //   ...val
-        // }))
-        // const dataCopy = [
-        //   {shmc:'数字货币',code:'SZHB435345232',kc:'7',money:'1000000',link:'www.baidu.com',type:''}
-        // ]
         const queryParams = {
           name:this.queryParams.name || '',
           code:this.queryParams.code || '',
@@ -119,9 +111,6 @@ export default {
         }))
           this.loading = false
         })
-
-        // this.loading = false
-      // })
     },
     // 上架
     shelves (row) {
