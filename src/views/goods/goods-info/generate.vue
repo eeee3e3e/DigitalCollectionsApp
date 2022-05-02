@@ -77,8 +77,7 @@ export default {
          this.ruleForm.fileList = []
           this.ruleForm.CommodityID = ''
         this.dialogVisible = false
-        this.showAddDialogs = false
-        // this.$emit('close')
+        this.$emit('closes')
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {

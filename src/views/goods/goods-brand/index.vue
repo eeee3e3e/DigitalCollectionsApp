@@ -35,7 +35,7 @@
        </m-table>
      </template>
    </table-page>
-    <dialog-banner :showAddDialog="showAddDialog" :title="title" @close="close" :content="content"></dialog-banner>
+    <dialog-banner :showAddDialog="showAddDialog" :title="title" @close="close" @closes="closes" :content="content"></dialog-banner>
    </div>
 </template>
 <script>
@@ -79,6 +79,10 @@ export default {
       this.showAddDialog = false
       this.content = {}
       this.getList()
+    },
+    closes () {
+      this.showAddDialog = false
+      this.content = {}
     },
     // 获取数据
     getList () {

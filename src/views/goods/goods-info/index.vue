@@ -28,8 +28,8 @@
            </div>
          </template>
          <template slot="AttachmentList" slot-scope="scope">
-           <div style="width:80px;height:80px" v-for="(item,index) in scope.row.AttachmentList" :key="index">
-              <img :src="`${url}${item}`" alt="">
+           <div style="width:80px;height:80px;overflow:hidden;">
+              <img v-for="(item,index) in scope.row.AttachmentList" :key="index" :src="`${url}${item}`" alt="">
            </div>
          </template>
          <template slot="Status" slot-scope="scope">
@@ -39,8 +39,8 @@
        </m-table>
      </template>
    </table-page>
-      <edit-shop :showAddDialog="showAddDialog" @close="close" :title="title" :content="content"></edit-shop>
-      <generate :showAddDialogs="showAddDialogs" @close="close" :commodityID="commodityID"></generate>
+      <edit-shop :showAddDialog="showAddDialog" @close="close" :title="title"  @closes="closes" :content="content"></edit-shop>
+      <generate :showAddDialogs="showAddDialogs" @close="close" @closes="closes" :commodityID="commodityID"></generate>
    </div>
 </template>
 <script>
@@ -87,6 +87,10 @@ export default {
       this.showAddDialog = false
       this.showAddDialogs = false
       this.getList()
+    },
+    closes () {
+      this.showAddDialog = false
+      this.showAddDialogs = false
     },
     // 获取数据
     getList () {
