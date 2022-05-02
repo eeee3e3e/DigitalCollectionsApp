@@ -309,6 +309,7 @@ export default {
             }
           }
         this.dialogVisible = false
+        this.showAddDialog = false
         // this.$emit('close')
       }
   },

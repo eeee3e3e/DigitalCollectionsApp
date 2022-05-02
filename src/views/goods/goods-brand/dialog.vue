@@ -132,6 +132,7 @@ export default {
           this.dialogVisible = true
         this.$refs['ruleForm'].resetFields()
         this.dialogVisible = false
+        this.showAddDialog = false
         // this.$emit('close')
       },
       submitForm(formName) {

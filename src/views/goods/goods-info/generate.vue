@@ -77,6 +77,7 @@ export default {
          this.ruleForm.fileList = []
           this.ruleForm.CommodityID = ''
         this.dialogVisible = false
+        this.showAddDialogs = false
         // this.$emit('close')
       },
       submitForm (formName) {
