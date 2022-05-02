@@ -28,7 +28,7 @@
    </table-page>
 </template>
 <script>
-import { GetCommodityDetailsByTypeSingle } from "@/api/goods.js";
+import { GetCommodityDetailsByTypeSingleD,DeleteCommodityDetails } from "@/api/goods.js";
 import search from './search'
 export default {
   components:{search},
@@ -65,7 +65,7 @@ export default {
           ...this.pageParams
         }
       this.loading = true
-      GetCommodityDetailsByTypeSingle(queryParams).then(res=>{
+      GetCommodityDetailsByTypeSingleD(queryParams).then(res=>{
         const {Data,TotalCount} =res
         this.data = Data.map(val=>({
           ...val,
@@ -77,8 +77,21 @@ export default {
         this.loading = false
     })
     },
-    edit () {
-
+    edit (row) {
+      DeleteCommodityDetails(row.ID).then(res=>{
+         if (res.ReturnCode === '200') {
+            this.$message({
+              message: '一码多兑的兑换码列表删除成功',
+              type: 'success'
+        });
+         this.getList()
+        } else {
+          this.$message({
+              message: '一码多兑的兑换码列表删除失败',
+              type: 'error'
+        });
+        }
+      })
     },
     // 搜索按钮操作
     handleQuery (params) {

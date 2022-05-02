@@ -78,9 +78,19 @@ export default {
     })
     },
     handleEdit (row) {
-      console.log(row)
       DeleteCommodityDetails(row.ID).then(res=>{
-          this.getList()
+         if (res.ReturnCode === '200') {
+            this.$message({
+              message: '一码一兑的兑换码列表删除成功',
+              type: 'success'
+        });
+         this.getList()
+        } else {
+          this.$message({
+              message: '一码一兑的兑换码列表删除失败',
+              type: 'error'
+        });
+        }
       })
     },
     // 搜索按钮操作

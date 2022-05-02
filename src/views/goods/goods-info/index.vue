@@ -124,7 +124,13 @@ export default {
     // 上架
     shelves (row) {
       CommodityOnLine(row.ID).then(res=>{
+        if (res.ReturnCode === '200') {
+            this.$message({
+              message: '此商品上架成功',
+              type: 'success'
+        });
          this.getList()
+        }
       })
     },
     //生成
@@ -141,7 +147,13 @@ export default {
     // 下架
     down (row) {
       CommodityOffLine(row.ID).then(res=>{
-          this.getList()
+          if (res.ReturnCode === '200') {
+            this.$message({
+              message: '此商品下架成功',
+              type: 'success'
+        });
+         this.getList()
+        }
       })
     },
     edit (row) {
