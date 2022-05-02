@@ -162,7 +162,7 @@ export default {
           this.ImgUrl = []
           if (this.content.ImgUrl !== '' && this.content.ImgUrl !== 'string') {
             this.ImgUrl = [{url:''}]
-             this.ImgUrl[0].url = `http://82.156.240.41:9008/${this.content.ImgUrl}`
+             this.ImgUrl[0].url = `${BASE.API_DEV.manager}${this.content.ImgUrl}`
           } else {
             this.ImgUrl = []
           }

@@ -95,7 +95,7 @@ export default {
               this.commodityID = ''
                this.ruleForm.CommodityID = ''
                 this.dialogVisible = false
-                const file = `http://82.156.240.41:9008/${res.Data}`
+                const file = `${BASE.API_DEV.manager}${res.Data}`
                this.download('一码一兑',file)
             }
           })

@@ -22,7 +22,7 @@
          </template>
           <template slot="ImgUrl" slot-scope="scope">
            <div class="imgbox">
-              <img class="img" :src="`http://82.156.240.41:9008/${scope.row.ImgUrl}`" alt="">
+              <img class="img" :src="`${url}${scope.row.ImgUrl}`" alt="">
            </div>
          </template>
           <template slot="Status" slot-scope="scope">
@@ -63,10 +63,12 @@ export default {
       expandSearch:true,
       data:[],
       actionsE:[],
-      actionsd:[]
+      actionsd:[],
+      url:'',
     }
   },
   mounted () {
+    this.url = BASE.API_DEV.manager
     this.getList()
   },
   methods: {
@@ -86,7 +88,8 @@ export default {
         ...this.pageParams
       }
       getAddBanner(queryParams).then(res=>{
-        const {Data,TotalCount} =res
+        if (res.ReturnCode === '200') {
+          const {Data,TotalCount} =res
         this.data = Data.map(val=>({
           ...val,
           actions: val.Status === 'enable' ? [
@@ -99,18 +102,31 @@ export default {
         }))
         this.loading = false
         this.pagination.TotalCount = TotalCount
+        }
       })
     },
     // 禁用
     disable_click (row) {
       DisableBanner(row.ID).then(res=>{
-          this.getList()
+        if (res.ReturnCode === '200') {
+            this.$message({
+              message: '禁用成功',
+              type: 'success'
+        });
+         this.getList()
+        }
       })
     },
     //启用
     enable (row) {
       EnableBanner(row.ID).then(res=>{
-          this.getList()
+          if (res.ReturnCode === '200') {
+            this.$message({
+              message: '启用成功',
+              type: 'success'
+        });
+         this.getList()
+        }
       })
     },
     edit (row) {

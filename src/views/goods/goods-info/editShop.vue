@@ -320,12 +320,12 @@ export default {
           this.AttachmentList = []
           if (this.content.FrontImage !=='' && this.content.FrontImage !=='string') {
             this.FrontImage = [{url:''}]
-             this.FrontImage[0].url = `http://82.156.240.41:9008/${this.content.FrontImage}`
+             this.FrontImage[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
           } else {
             this.FrontImage = []
           }
          const AttachmentList_conversion = this.ruleForm.AttachmentList.map(item=>{
-           let urlImage = {url:`http://82.156.240.41:9008/${item}`}
+           let urlImage = {url:`${BASE.API_DEV.manager}${item}`}
            this.AttachmentList.push(urlImage)
          })
           // console

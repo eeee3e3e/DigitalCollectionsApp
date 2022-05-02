@@ -17,7 +17,6 @@ util.oneOf = function(ele, targetArr) {
     return false;
   }
 };
-
 // 打开新的页面
 util.openNewPage = function(vm, name, argu, query) {
   if (!vm.$store) {

@@ -24,12 +24,12 @@
          </template>
          <template slot="FrontImage" slot-scope="scope">
            <div class="imgbox">
-              <img class="img" :src="`http://82.156.240.41:9008/${scope.row.FrontImage}`" alt="">
+              <img class="img" :src="`${url}${scope.row.FrontImage}`" alt="">
            </div>
          </template>
          <template slot="AttachmentList" slot-scope="scope">
            <div style="width:80px;height:80px" v-for="(item,index) in scope.row.AttachmentList" :key="index">
-              <img :src="`http://82.156.240.41:9008/${item}`" alt="">
+              <img :src="`${url}${item}`" alt="">
            </div>
          </template>
          <template slot="Status" slot-scope="scope">
@@ -70,10 +70,12 @@ export default {
       showSearch:true,
       expandSearch:true,
       data:[],
+      url:''
     }
   },
   mounted () {
     this.getList()
+    this.url = BASE.API_DEV.manager
   },
   methods: {
     addShop () {
@@ -88,7 +90,7 @@ export default {
     },
     // 获取数据
     getList () {
-      // this.loading = true
+      this.loading = true
       // getList().then(res=>{
         // const {items} =res
         // this.data = items.map(val=>({
