@@ -53,7 +53,6 @@ export default {
     }
   },
   mounted (){
-    console.log('total',this.total)
   },
   computed:{
     currentPage:{

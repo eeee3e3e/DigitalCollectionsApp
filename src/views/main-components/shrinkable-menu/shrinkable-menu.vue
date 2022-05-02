@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     changeMenu(name) { //二级路由点击
-    console.log('name',name)
       this.$router.push({
         name: name
       });

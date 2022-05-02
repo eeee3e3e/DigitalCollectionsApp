@@ -129,7 +129,6 @@ export default {
 
   },
   mounted () {
-    console.log(this.pagination)
     this.computeHeight()
     // this.$bus.$on('onHandleClick',this.onHandleClick)
     window.addEventListener('resize',this.computeHeight)
