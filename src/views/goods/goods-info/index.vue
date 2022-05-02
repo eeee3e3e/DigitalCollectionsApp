@@ -105,7 +105,6 @@ export default {
         }
         console.log(queryParams)
         GetCommodityListBack(queryParams).then(res=>{
-          console.log('数据',res)
           this.data = res.Data.map(val=>({
           ...val,
           actions: val.Status === 'online' ? [{label:'下架',handleClickName:'down'},

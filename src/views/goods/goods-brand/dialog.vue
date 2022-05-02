@@ -160,7 +160,6 @@ export default {
         if (this.title === '编辑') {
           this.ruleForm = {...this.content}
           this.ImgUrl = []
-          console.log('this.content.ImgUrl',this.content.ImgUrl)
           if (this.content.ImgUrl !== '' && this.content.ImgUrl !== 'string') {
             this.ImgUrl = [{url:''}]
              this.ImgUrl[0].url = `http://82.156.240.41:9008/${this.content.ImgUrl}`

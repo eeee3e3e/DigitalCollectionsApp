@@ -78,7 +78,6 @@ export default {
 
     },
     edit () {
-      console.log(1111)
       this.showAddDialog = true
     },
     lock () {

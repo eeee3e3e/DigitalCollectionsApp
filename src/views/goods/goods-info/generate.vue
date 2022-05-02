@@ -91,7 +91,6 @@ export default {
       }
         if (this.radio === '2') {
           CreateCommodityDetailsSingle({commodityID:this.commodityID}).then(res=>{
-            console.log('接口调用成功')
             if (res.Data) {
               this.commodityID = ''
                this.ruleForm.CommodityID = ''
@@ -112,7 +111,6 @@ export default {
       let fd = new FormData()
       fd.append('files', file.raw)
       CreateCommodityDetailsMultiple(this.commodityID,fd).then(res=>{
-        console.log('一码多兑',res)
         this.radio = '1'
       })
 

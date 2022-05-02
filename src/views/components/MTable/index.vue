@@ -187,7 +187,6 @@ export default {
           const mTableOffsetTop = this.$refs[this.refTable].$el.getBoundingClientRect().top
           const mTableOffsetBottom = this.$refs[this.refTable + 'Pagination'].getBoundingClientRect().height
         this.autoComputeHeight = `calc(100vh - ${mTableOffsetTop + 60 + mTableOffsetBottom}px)`
-        console.log('this.autoComputeHeight',this.autoComputeHeight)
         },100)
       }
     },
