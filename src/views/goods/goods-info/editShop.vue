@@ -1,41 +1,80 @@
 <template>
 <el-dialog :title="title" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false" append-to-body :close-on-press-escape="false" :before-close="handleClose">
-  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="商品名称">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+    <el-form-item v-if="title === '新增'" label="商品类型" prop="CommodityTypeID">
+     <el-select style="width:100%" v-model="ruleForm.CommodityTypeID" placeholder="请选择">
+    <el-option
+      v-for="item in optionsCommodityTypeID"
+      :key="item.ID"
+      :label="item.Name"
+      :value="item.ID">
+    </el-option>
+  </el-select>
   </el-form-item>
-  <el-form-item label="商品价格">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form-item v-if="title === '新增'" label="售卖方式" prop="SaleModeID">
+    <el-select style="width:100%" v-model="ruleForm.SaleModeID" placeholder="请选择">
+    <el-option
+      v-for="item in optionsSaleModeID"
+      :key="item.ID"
+      :label="item.Name"
+      :value="item.ID">
+    </el-option>
+  </el-select>
   </el-form-item>
-  <el-form-item label="商品数量">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form-item label="商品名称" prop="Name">
+    <el-input v-model="ruleForm.Name"></el-input>
   </el-form-item>
-  <el-form-item label="预售开始时间">
-    <el-col :span="11">
-      <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-    </el-col>
-    <el-col class="line" :span="2">-</el-col>
-    <el-col :span="11">
-      <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-    </el-col>
+  <el-form-item label="商品价格" prop="Price">
+    <el-input v-model="ruleForm.Price"></el-input>
   </el-form-item>
-  <el-form-item label="预售结束时间">
-    <el-col :span="11">
-      <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-    </el-col>
-    <el-col class="line" :span="2">-</el-col>
-    <el-col :span="11">
-      <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-    </el-col>
+  <el-form-item label="限量" prop="LimitNum">
+    <el-input v-model="ruleForm.LimitNum"></el-input>
   </el-form-item>
-  <el-form-item label="商品类型">
-    <el-radio-group v-model="ruleForm.resource">
-      <el-radio label="数字藏品"></el-radio>
-      <el-radio label="票付通商品"></el-radio>
-      <el-radio label="活动商品"></el-radio>
-    </el-radio-group>
+   <el-form-item label="系列" prop="SerialType">
+    <el-input v-model="ruleForm.SerialType"></el-input>
   </el-form-item>
-   <el-form-item label="商品图片">
+  <el-form-item label="品牌方名称" prop="BrandName">
+    <el-input v-model="ruleForm.BrandName"></el-input>
+  </el-form-item>
+   <el-form-item label="创作方姓名" prop="AuthorName">
+    <el-input v-model="ruleForm.AuthorName"></el-input>
+  </el-form-item>
+    <el-form-item label="发行方名称" prop="ReleaseUserName">
+    <el-input v-model="ruleForm.ReleaseUserName"></el-input>
+  </el-form-item>
+   <el-form-item label="购买须知" prop="PurchaseNote">
+    <el-input v-model="ruleForm.PurchaseNote"></el-input>
+  </el-form-item>
+  <el-form-item label="售卖开始时间" prop="StartDateTime">
+    <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="teststart" :value="ruleForm.StartDateTime"  placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+  </el-form-item>
+  <el-form-item label="售卖结束时间" prop="EndDateTime">
+     <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="testend" :value="ruleForm.EndDateTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+  </el-form-item>
+  <el-form-item label="封面" prop="AttachmentList">
+    <el-upload
+            ref="uploads"
+            action=""
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreviewf"
+            :on-remove="handleRemovef"
+            :on-change="UploadImagef"
+            :file-list="FrontImage"
+            :auto-upload="false"
+            :limit="1"
+        >
+          <i class="el-icon-plus"></i>
+          <template #tip>
+            <div style="font-size: 12px;color: #919191;">
+              单次限制上传一张图片且封面只能上传一张
+            </div>
+          </template>
+        </el-upload>
+      <el-dialog :visible.sync="dialogV" append-to-body>
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
+  </el-form-item>
+   <el-form-item label="商品图片" prop="AttachmentList">
           <el-upload
             ref="upload"
             action=""
@@ -43,8 +82,7 @@
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
             :on-change="UploadImage"
-            :limit="1"
-            :file-list="fileList"
+            :file-list="AttachmentList"
             :auto-upload="false"
         >
           <i class="el-icon-plus"></i>
@@ -54,35 +92,12 @@
             </div>
           </template>
         </el-upload>
-      <el-dialog :visible.sync="dialogV">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-  </el-form-item>
-  <el-form-item label="封面图片">
-          <el-upload
-            ref="uploads"
-            action=""
-            list-type="picture-card"
-            :on-preview="handlePictureCardPreviews"
-            :on-remove="handleRemoves"
-            :on-change="UploadImages"
-            :limit="1"
-            :file-list="fileLists"
-            :auto-upload="false"
-        >
-          <i class="el-icon-plus"></i>
-          <template #tip>
-            <div style="font-size: 12px;color: #919191;">
-              单次限制上传一张图片
-            </div>
-          </template>
-        </el-upload>
-      <el-dialog :visible.sync="dialogVs">
+      <el-dialog :visible.sync="dialogVs" append-to-body>
         <img width="100%" :src="dialogImageUrls" alt="">
       </el-dialog>
   </el-form-item>
-  <el-form-item label="商品描述">
-    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+  <el-form-item label="描述信息" prop="Description">
+    <el-input type="textarea" v-model="ruleForm.Description"></el-input>
   </el-form-item>
   <el-form-item style="text-align:center;">
     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -94,6 +109,7 @@
 <script>
 // uploadCity
 import { uploadCity } from "@/api/index";
+import { addCommodity,GetSaleModeList,GetCommodityTypeListAll } from "@/api/goods.js";
 export default {
   name:'editShop',
   props:{
@@ -104,11 +120,18 @@ export default {
     title:{
       type:String,
       default:''
+    },
+    content:{
+      type:Object,
+      default:{}
     }
   },
   data () {
     return {
-      fileList:[],
+      optionsCommodityTypeID:[],
+      optionsSaleModeID:[],
+      AttachmentList:[],
+          FrontImage:[{url:''}],
       fileLists:[],
       disabled:false,
       dialogV:false,
@@ -117,102 +140,152 @@ export default {
       dialogImageUrls:'',
       dialogVisible: false,
       ruleForm: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          ID:'',
+          SaleModeID:'',
+          CommodityTypeID:'',
+          FrontImage:'',
+          Name: '',
+          Price: '',
+          LimitNum: '',
+          Price: '',
+          Description: '',
+          AttachmentList: [],
+          PurchaseNote: '',
+          ReleaseUserName: '',
+          AuthorName:'',
+          BrandName:'',
+          SerialType:'',
+          StartDateTime:'',
+          EndDateTime:''
+
         },
         rules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+           SaleModeID: [
+            { required: true, message: '请选择售卖方式', trigger: 'change' }
           ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
+           CommodityTypeID: [
+            { required: true, message: '请选择商品类型', trigger: 'change' }
           ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          Name: [
+            { required: true, message: '请输入商品名称', trigger: 'blur' }
           ],
-          date2: [
-            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+          Price: [
+            { required: true, message: '请输入商品价格', trigger: 'blur' }
           ],
-          type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+          LimitNum: [
+            { required: true, message: '请输入限量', trigger: 'blur' }
           ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
+          Price: [
+            { required: true, message: '请输入商品价格', trigger: 'blur' }
           ],
-          desc: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
+          Description: [
+            { required: true, message: '请输入描述信息', trigger: 'blur' }
+          ],
+          PurchaseNote: [
+            { required: true, message: '请输入购买须知', trigger: 'blur' }
+          ],
+           ReleaseUserName: [
+            { required: true, message: '请输入发行方名称', trigger: 'blur' }
+          ],
+           AuthorName: [
+            { required: true, message: '请输入创作方姓名', trigger: 'blur' }
+          ],
+          BrandName: [
+            { required: true, message: '请输入品牌方名称', trigger: 'blur' }
+          ],
+          SerialType: [
+            { required: true, message: '请输入系列', trigger: 'blur' }
+          ],
+          AttachmentList: [
+            { required: true, message: '请上传商品图片', trigger: 'blur' }
+          ],
+          FrontImage:[
+            { required: true, message: '请上传封面', trigger: 'blur' }
+          ],
+          StartDateTime: [
+            {  required: true, message: '请选择日期', trigger: 'blur' }
+          ],
+          EndDateTime: [
+            {  required: true, message: '请选择日期', trigger: 'blur' }
           ]
         }
     }
   },
   mounted () {
+    this.GetSaleModeList()
+    this.GetCommodityTypeListAll()
   },
   methods:{
+    GetSaleModeList () {
+      GetSaleModeList().then(res=>{
+        this.optionsSaleModeID = res.Data
+      })
+    },
+    GetCommodityTypeListAll () {
+      GetCommodityTypeListAll().then(res=>{
+        this.optionsCommodityTypeID = res.Data
+      })
+    },
+    teststart (v) {
+      this.ruleForm.StartDateTime = v
+    },
+    testend (v) {
+      this.ruleForm.EndDateTime = v
+    },
+    ////       图片
     //移除图片功能
     handleRemove(file, fileList) {
-      console.log(file, fileList)
-
+       const cueRemoveString = '/'+ file.url.split('//')[2]
+      this.ruleForm.AttachmentList.map((val,i)=>{
+        if (val === cueRemoveString) {
+          this.ruleForm.AttachmentList.splice(i,1)
+        }
+      })
     },
     //预览图片功能
     handlePictureCardPreview(file) {
-      console.log(file.url);
-      this.dialogV = true
-      this.dialogImageUrl = file.url
-
-    },
-    UploadImage(file,filelist) {
-      console.log(file);
-      let fd = new FormData()
-      fd.append('file', file.raw) //传给后台接收的名字 file
-
-      uploadCity(file.name).then(res=>{
-        console.log('附件接口',res)
-      })
-      // axios.post('/upload/image', fd, {headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
-      //   //上传成功后返回的数据,
-      //   console.log("上传图片到:"+response.data);
-      //   // 将图片地址给到表单.
-      //   this.ruleForm.image=response.data
-      // })
-
-    },
-    ////
-    //移除图片功能
-    handleRemoves(file, fileLists) {
-      console.log(file, fileLists)
-
-    },
-    //预览图片功能
-    handlePictureCardPreviews(file) {
-      console.log(file.url);
       this.dialogVs = true
       this.dialogImageUrls = file.url
 
     },
-    UploadImages(file,filelists) {
-      //console.log(file);
+    UploadImage(file,filelist) {
       let fd = new FormData()
-      fd.append('file', file.raw) //传给后台接收的名字 file
-      // axios.post('/upload/image', fd, {headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
-      //   //上传成功后返回的数据,
-      //   console.log("上传图片到:"+response.data);
-      //   // 将图片地址给到表单.
-      //   this.ruleForm.image=response.data
-      // })
+      fd.append('files', file.raw)
+      uploadCity(file.name,fd).then(res=>{
+
+        this.ruleForm.AttachmentList.push(res.Data)
+
+      })
+
+    },
+       ////       封面
+    //移除图片功能
+    handleRemovef(file, fileList) {
+    this.FrontImage= []
+      this.ruleForm.FrontImage = ''
+    },
+    //预览图片功能
+    handlePictureCardPreviewf(file) {
+      this.dialogV = true
+      this.dialogImageUrl = file.url
+
+    },
+    UploadImagef(file,filelist) {
+      let fd = new FormData()
+      fd.append('files', file.raw)
+      uploadCity(file.name,fd).then(res=>{
+        this.ruleForm.FrontImage = res.Data
+      })
 
     },
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // alert('submit!');
-            this.$emit('close')
+            addCommodity(this.ruleForm).then(res=>{
+              this.dialogVisible = false
+               this.$emit('close')
+
+            })
           } else {
             console.log('error submit!!');
             return false;
@@ -220,7 +293,26 @@ export default {
         });
       },
       handleClose () {
-        this.$refs['ruleForm'].resetFields()
+        // this.$refs['ruleForm'].resetFields()
+         this.FrontImage = []
+          this.AttachmentList = []
+          this.ruleForm.ID ='',
+          this.ruleForm.SaleModeID ='',
+          this.ruleForm.CommodityTypeID ='',
+          this.ruleForm.FrontImage ='',
+          this.ruleForm.Name = '',
+          this.ruleForm.Price = '',
+          this.ruleForm.LimitNum = '',
+          this.ruleForm.Price = '',
+          this.ruleForm.Description = '',
+          this.ruleForm.AttachmentList = [],
+          this.ruleForm.PurchaseNote = '',
+          this.ruleForm.ReleaseUserName = '',
+          this.ruleForm.AuthorName ='',
+          this.ruleForm.BrandName ='',
+          this.ruleForm.SerialType ='',
+          this.ruleForm.StartDateTime ='',
+          this.ruleForm.EndDateTime =''
         this.dialogVisible = false
         this.$emit('close')
       }
@@ -228,9 +320,46 @@ export default {
   watch :{
     showAddDialog (val) {
       if (val) {
-        this.dialogVisible = true
+        if (this.title === '编辑') {
+          this.ruleForm = {...this.content}
+          this.AttachmentList = []
+          if (this.content.FrontImage !=='' && this.content.FrontImage !=='string') {
+            this.FrontImage = [{url:''}]
+             this.FrontImage[0].url = `http://82.156.240.41:9008/${this.content.FrontImage}`
+          } else {
+            this.FrontImage = []
+          }
+         const AttachmentList_conversion = this.ruleForm.AttachmentList.map(item=>{
+           let urlImage = {url:`http://82.156.240.41:9008/${item}`}
+           this.AttachmentList.push(urlImage)
+         })
+          // console
+          this.dialogVisible = true
+        } else {
+          this.FrontImage = []
+          this.AttachmentList = []
+          this.ruleForm.ID ='',
+          this.ruleForm.SaleModeID ='',
+          this.ruleForm.CommodityTypeID ='',
+          this.ruleForm.FrontImage ='',
+          this.ruleForm.Name = '',
+          this.ruleForm.Price = '',
+          this.ruleForm.LimitNum = '',
+          this.ruleForm.Price = '',
+          this.ruleForm.Description = '',
+          this.ruleForm.AttachmentList = [],
+          this.ruleForm.PurchaseNote = '',
+          this.ruleForm.ReleaseUserName = '',
+          this.ruleForm.AuthorName ='',
+          this.ruleForm.BrandName ='',
+          this.ruleForm.SerialType ='',
+          this.ruleForm.StartDateTime ='',
+          this.ruleForm.EndDateTime =''
+          this.dialogVisible = true
+        }
       }
     }
+
   }
 }
 </script>

@@ -25,12 +25,14 @@
             <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
               <Dropdown transfer trigger="hover" @on-click="handleClickUserDropdown">
                 <div class="dropList">
-                  <span class="main-user-name">{{ userInfo.UserName }}</span>
+                  <span class="main-user-name">{{ userInfo.RealName }}</span>
                   <Icon type="md-arrow-dropdown" />
-                  <Avatar
+                  <!-- <Avatar
                     :src="userInfo.UserHead"
                     style="background: #fff; margin-left: 10px"
-                  ></Avatar>
+                  ></Avatar> -->
+                   <img
+                    src="@/assets/avatar.png"  style="background: #fff;width: 22px;height: 22px; margin-left: 10px">
                 </div>
                 <DropdownMenu slot="list">
                   <!-- <DropdownItem name="personalCenter">{{

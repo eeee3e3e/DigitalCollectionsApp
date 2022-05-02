@@ -1,7 +1,7 @@
 <template>
   <el-form class="search-form" :inline="true">
     <el-form-item label="banner名称" label-width="180px">
-      <el-input style="width:220px" size="small"></el-input>
+      <el-input style="width:220px" size="small" v-model="queryParams.name"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" size="small" icon="el-icon-search" @click="handleQuery">查询</el-button>
@@ -15,7 +15,7 @@ export default {
   data () {
     return {
       queryParams:{
-
+        name:''
       }
     }
   },

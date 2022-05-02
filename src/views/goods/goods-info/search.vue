@@ -1,13 +1,13 @@
 <template>
   <el-form class="search-form" :inline="true">
     <el-form-item label="商品名称" label-width="180px">
-      <el-input style="width:220px" size="small"></el-input>
+      <el-input style="width:220px" v-model="queryParams.name" size="small"></el-input>
     </el-form-item>
    <el-form-item label="商品编号" label-width="180px">
-      <el-input style="width:220px" size="small"></el-input>
+      <el-input style="width:220px" v-model="queryParams.code" size="small"></el-input>
     </el-form-item>
    <el-form-item label="状态" label-width="180px">
-      <el-select style="width:220px" size="small" placeholder="请选择" v-model="value">
+      <el-select style="width:220px" size="small" placeholder="请选择" v-model="queryParams.status">
         <el-option v-for="item in options" :key="item.value" :label="item.lable" :value="item.value"
         ></el-option>
       </el-select>
@@ -25,15 +25,17 @@ export default {
     return {
       value:'',
       queryParams:{
-
+        name:'',
+        code:'',
+        status:''
       },
       options:[{
-        lable:'上架',
-        value:'1'
+        lable:'正常',
+        value:'online'
         },
         {
         lable:'下架',
-        value:'2'
+        value:'offline'
         }
       ]
     }

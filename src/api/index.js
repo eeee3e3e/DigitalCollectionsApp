@@ -46,14 +46,33 @@ export const hotShops = (params) => {
 export const getNoticePage = (params) => {
   return getRequest("/statistics/index/notice", params);
 };
-
+// 添加banner
+export const AddBanner = (params) => {
+  return postRequest(`/api/Banner/AddBanner`,params);
+};
+// 城市数藏 删除banner（验证码删除）
+export const DeleteBanner = (ids) =>{
+  return deleteRequest(`/api/Banner/DeleteBanner?id=${ids}`)
+}
+// 获取banner列表
+export const getAddBanner = (queryParams) => {
+  return getRequest(`/api/Banner/GetBannerListBack?name=${queryParams.name}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+};
+ //根据ID禁用指定Banner
+ export const DisableBanner = (params) => {
+  return postRequest(`/api/Banner/DisableBanner/2?id=${params}`)
+}
+ //根据ID启用指定Banner
+ export const EnableBanner = (params) => {
+  return postRequest(`/api/Banner/EnableBanner?ID=${params}`)
+}
 // 城市数藏登陆
 export const login = (params) => {
   return postRequestWithNoTokenData("api/UserInfo/LoginByLoginname", params);
 };
 // 城市数藏附件上传
-export const uploadCity = (params) => {
-  return postUploadRequest(`/api/UploadFile/UploadFileBack?path=/image/${params}`);
+export const uploadCity = (name,params) => {
+  return postUploadRequest(`/api/UploadFile/UploadFileBack?path=/image/${name}`,params);
 };
 // 登出
 export const logout = () => {

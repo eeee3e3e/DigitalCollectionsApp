@@ -1,7 +1,7 @@
 <template lang="">
   <div :class="{'hidden':hidden}" class="pagination-container">
     <el-pagination :background ="background"
-    :current-page.sync="pageSize"
+    :current-page.sync="currentPage"
     :page-size.sync="pageSize"
     :layout="layout"
     :page-sizes="pageSizes"
@@ -52,6 +52,9 @@ export default {
       default:false
     }
   },
+  mounted (){
+    console.log('total',this.total)
+  },
   computed:{
     currentPage:{
       get () {
@@ -71,41 +74,41 @@ export default {
     }
   },
   methods:{
-    scrollTo (to,duration,callback) {
-      const start = postion()
-      const chnage = to - start
-      const increment = 20
-      let currentTime = 0
-      duration = (typeof (duration) === 'undefined') ? 500 : duration
-      var animateScroll = function () {
-        currentTime += increment
-        move(val)
-          if (currentTime < duration) {
-            requestAnimationFrame(animateScroll)
-          }else{
-            if (callback && typeof (callback) === 'function') {
-              callback()
-            }
-        }
-      }
-      animateScroll()
-    },
+    // scrollTo (to,duration,callback) {
+    //   const start = postion()
+    //   const chnage = to - start
+    //   const increment = 20
+    //   let currentTime = 0
+    //   duration = (typeof (duration) === 'undefined') ? 500 : duration
+    //   var animateScroll = function () {
+    //     currentTime += increment
+    //     move(val)
+    //       if (currentTime < duration) {
+    //         requestAnimationFrame(animateScroll)
+    //       }else{
+    //         if (callback && typeof (callback) === 'function') {
+    //           callback()
+    //         }
+    //     }
+    //   }
+    //   animateScroll()
+    // },
     handleSizeChange (val) {
       this.$emit('pagination',{page:this.currentPage,limit:val})
-      if (this.autoScroll) {
-        this.scrollTo(0,800)
-      }
+      // if (this.autoScroll) {
+      //   this.scrollTo(0,800)
+      // }
     },
     handleCurrentChange (val) {
       this.$emit('pagination',{page:val,limit:this.pageSize})
-      if (this.autoScroll) {
-        this.scrollTo(0,800)
-      }
+      // if (this.autoScroll) {
+      //   this.scrollTo(0,800)
+      // }
     }
   }
 }
 </script>
-<style scoped>
+<style scoped lang="less">
   .pagination-container {
     background:#FFF;
     padding:32px 16px
@@ -113,4 +116,11 @@ export default {
   .pagination-container.hidden {
     display: none;
   }
+ /deep/ .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: red !important;
+    color: #FFF;
+}
+/deep/ .el-pagination{
+  text-align:right;
+}
 </style>

@@ -8,46 +8,59 @@
      <!-- 表格主体 -->
      <template slot="table">
        <m-table v-loading="loading" hideRightMenu :data="data" :headers="tableHeaders"
-       :rowKey="+new Date() + ''"
+       :rowKey="tableRowKeys"
        :pageKey="'pageNumber'"
        :pageParams="pageParams"
        :pagination="pagination"
        :refreshDom="refreshDom"
-       @down="down"
+       @disable_click="disable_click"
        @edit="edit"
-       @editLink="editLink"
-       @yjqc="yjqc"
-       @lock="lock"
-       @sc="sc">
+       @del="del"
+       @enable="enable">
          <template slot="tableMenuLeft">
-           <el-button type="primary" @click="add">添加</el-button>
+           <el-button type="primary" size="small" @click="add">添加Banner</el-button>
+         </template>
+          <template slot="ImgUrl" slot-scope="scope">
+           <div style="width:146px;height:80px;object-fit: cover; width: auto;">
+              <img class="img" :src="`http://82.156.240.41:9008/${scope.row.ImgUrl}`" alt="">
+           </div>
+         </template>
+          <template slot="Status" slot-scope="scope">
+           <div v-if="scope.row.Status === 'enable'">启用</div>
+           <div v-if="scope.row.Status === 'disable'">禁用</div>
          </template>
        </m-table>
      </template>
    </table-page>
-    <dialog-banner :showAddDialog="showAddDialog" @close="close"></dialog-banner>
+    <dialog-banner :showAddDialog="showAddDialog" :title="title" @close="close" :content="content"></dialog-banner>
    </div>
 </template>
 <script>
+import { getAddBanner,DeleteBanner,DisableBanner,EnableBanner } from "@/api/index";
 import search from './search'
 import dialogBanner from './dialog'
 export default {
   components:{search,dialogBanner},
   data () {
     return {
+      title:'',
+      content:{},
       showAddDialog:false,
       loading:false,
       refreshDom:+new Date(),
       pagination:{
-        total:0
+        TotalCount:0
       },
       pageParams:{
-        pageNumber:1,
+        pageIndex:1,
         pageSize:10
       },
+      queryParams:{},
       showSearch:true,
       expandSearch:true,
-      data:[]
+      data:[],
+      actionsE:[],
+      actionsd:[]
     }
   },
   mounted () {
@@ -56,56 +69,66 @@ export default {
   methods: {
     close () {
       this.showAddDialog = false
+      this.content = {}
+      this.getList()
     },
     // 获取数据
     getList () {
-      // this.loading = true
-      // getList().then(res=>{
-        // const {items} =res
-        // this.data = items.map(val=>({
-        //   ...val
-        // }))
-        const dataCopy = [
-          {shmc:'第一张图',code:'SZHB435345232',kc:'7'}
-        ]
-        this.data = dataCopy.map(val=>({
-          ...val
+      this.loading = true
+      const queryParams = {
+        name:this.queryParams.name || '',
+        ...this.pageParams
+      }
+      getAddBanner(queryParams).then(res=>{
+        const {Data,TotalCount} =res
+        this.data = Data.map(val=>({
+          ...val,
+          actions: val.Status === 'enable' ? [
+          {label:'编辑',handleClickName:'edit'},
+          {label:'禁用',handleClickName:'disable_click'},
+          {label:'删除',handleClickName:'del'},] :[
+          {label:'编辑',handleClickName:'edit'},
+          {label:'启用',handleClickName:'enable'},
+          {label:'删除',handleClickName:'del'},]
         }))
         this.loading = false
-      // })
-    },
-    down () {
-
-    },
-    edit () {
-
-    },
-    yjqc () {
-
-    },
-    add () {
-      console.log('出发')
-      this.showAddDialog = true
-    },
-    lock () {
-      this.$router.push({
-        name: "goods-detail",
-        query: { },
+        this.pagination.TotalCount = TotalCount
       })
     },
-    sc () {
-
+    // 禁用
+    disable_click (row) {
+      DisableBanner(row.ID).then(res=>{
+          this.getList()
+      })
     },
-    editLink () {
-
+    //启用
+    enable (row) {
+      EnableBanner(row.ID).then(res=>{
+          this.getList()
+      })
+    },
+    edit (row) {
+      this.title="编辑"
+      this.content = row
+      this.showAddDialog = true
+    },
+    del (row) {
+      DeleteBanner(row.ID).then(res=>{
+          this.getList()
+      })
+    },
+    add () {
+      this.title = "新增"
+      this.showAddDialog = true
     },
     // 搜索按钮操作
-    handleQuery () {
-
+    handleQuery (params) {
+      this.queryParams = {...params}
+      this.getList()
     },
     //  重置按钮操作
-    resetQuery () {
-      this.searchParams = {}
+    resetQuery (params) {
+      this.queryParams = {...params}
       this.getList()
     },
     toggleSearch () {
@@ -119,18 +142,31 @@ export default {
   computed: {
     tableHeaders () {
       return [
-        {label:'banner名称',prop:'shmc'},
-        {label:'banner图标',prop:'code'},
-        {label:'状态',prop:'kc'},
+        {label:'Banner名称',prop:'Name'},
+        {label:'Banner类别',prop:'Category'},
+        {label:'跳转链接',prop:'LinkUrl'},
+        {label:'图片地址',prop:'ImgUrl',slot:true},
+        {label:'状态',prop:'Status',slot:true},
+        {label:'创建人',prop:'CreateUserID'},
         {label:'操作',prop:'actions',fixed:'right',width:320},
       ]
     },
-    // tableRowKeys () {
-    //   return code
-    // }
+    tableRowKeys () {
+      return 'ID'
+    }
   }
 }
 </script>
-<style lang="scss">
-
+<style lang="scss" scoped>
+.img{
+  width:auto;
+        height:auto;
+        max-width:100%;
+        max-height:100%;
+        object-fit:cover;
+}
+ /deep/ .el-button--primary{
+  background-color:red;
+    border-color: red;
+}
 </style>

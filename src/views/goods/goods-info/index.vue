@@ -9,44 +9,64 @@
      <template slot="table">
        <m-table v-loading="loading" selection hideRightMenu :data="data" :headers="tableHeaders"
        :rowKey="+new Date() + ''"
-       :pageKey="'pageNumber'"
+       :pageKey="'pageIndex'"
+       :limitKey="'pageSize'"
        :pageParams="pageParams"
        :pagination="pagination"
        :refreshDom="refreshDom"
        @down="down"
        @edit="edit"
-       @editLink="editLink"
-       @yjqc="yjqc"
-       @lock="lock"
-       @sc="sc">
+       @generate="generate"
+       @save="save"
+       @shelves="shelves">
          <template slot="tableMenuLeft">
            <el-button type="primary" size="small" @click="addShop">添加商品</el-button>
+         </template>
+         <template slot="FrontImage" slot-scope="scope">
+           <div style="width:80px;height:80px">
+              <img :src="`http://82.156.240.41:9008/${scope.row.FrontImage}`" alt="">
+           </div>
+         </template>
+         <template slot="AttachmentList" slot-scope="scope">
+           <div style="width:80px;height:80px" v-for="(item,index) in scope.row.AttachmentList" :key="index">
+              <img :src="`http://82.156.240.41:9008/${item}`" alt="">
+           </div>
+         </template>
+         <template slot="Status" slot-scope="scope">
+           <div v-if="scope.row.Status === 'online'">正常</div>
+           <div v-if="scope.row.Status === 'offline'">下架</div>
          </template>
        </m-table>
      </template>
    </table-page>
       <edit-shop :showAddDialog="showAddDialog" @close="close" :title="title" :content="content"></edit-shop>
+      <generate :showAddDialogs="showAddDialogs" @close="close" :commodityID="commodityID"></generate>
    </div>
 </template>
 <script>
 import search from './search'
 import editShop from './editShop'
+import generate from './generate'
+import { GetCommodityListBack,CommodityOffLine } from "@/api/goods.js";
 export default {
-  components:{search,editShop},
+  components:{search,editShop,generate},
   data () {
     return {
+      commodityID:'',
       content:{},
       title:'',
       showAddDialog:false,
+      showAddDialogs:false,
       loading:false,
       refreshDom:+new Date(),
       pagination:{
         total:0
       },
       pageParams:{
-        pageNumber:1,
+        pageIndex:1,
         pageSize:10
       },
+      queryParams:{},
       showSearch:true,
       expandSearch:true,
       data:[]
@@ -63,6 +83,8 @@ export default {
     },
     close () {
       this.showAddDialog = false
+      this.showAddDialogs = false
+      this.getList()
     },
     // 获取数据
     getList () {
@@ -72,26 +94,50 @@ export default {
         // this.data = items.map(val=>({
         //   ...val
         // }))
-        const dataCopy = [
-          {shmc:'数字货币',code:'SZHB435345232',kc:'7',money:'1000000',link:'www.baidu.com',type:''}
-        ]
-        this.data = dataCopy.map(val=>({
+        // const dataCopy = [
+        //   {shmc:'数字货币',code:'SZHB435345232',kc:'7',money:'1000000',link:'www.baidu.com',type:''}
+        // ]
+        const queryParams = {
+          name:this.queryParams.name || '',
+          code:this.queryParams.code || '',
+          status:this.queryParams.code || '',
+          ...this.pageParams
+        }
+        console.log(queryParams)
+        GetCommodityListBack(queryParams).then(res=>{
+          console.log('数据',res)
+          this.data = res.Data.map(val=>({
           ...val,
           actions:[{label:'下架',handleClickName:'down'},
-          {label:'一键清仓',handleClickName:'yjqc'},
           {label:'编辑',handleClickName:'edit'},
-          {label:'查看',handleClickName:'lock'},
-          {label:'生成',handleClickName:'sc'},
-          {label:'链接编辑',handleClickName:'editLink'}]
+          {label:'查看',handleClickName:'save'},
+          {label:'生成',handleClickName:'generate'},]
         }))
-        this.loading = false
+          this.loading = false
+        })
+
+        // this.loading = false
       // })
     },
-    down () {
+    // 上架
+    shelves () {
 
     },
-    yjqc () {
+    //生成
+    generate (row) {
+      console.log('row',row)
+      this.commodityID = row.ID
+      this.showAddDialogs = true
+    },
+    // 查看
+    save () {
 
+    },
+    // 下架
+    down (row) {
+      CommodityOffLine(row.ID).then(res=>{
+          this.getList()
+      })
     },
     edit (row) {
       this.content = row
@@ -104,19 +150,17 @@ export default {
         query: { },
       })
     },
-    sc () {
 
-    },
-    editLink () {
-
-    },
     // 搜索按钮操作
-    handleQuery () {
+    handleQuery (params) {
+
+      this.queryParams = {...params}
+      this.getList()
 
     },
     //  重置按钮操作
-    resetQuery () {
-      this.searchParams = {}
+    resetQuery (params) {
+      this.queryParams = {...params}
       this.getList()
     },
     toggleSearch () {
@@ -130,12 +174,25 @@ export default {
   computed: {
     tableHeaders () {
       return [
-        {label:'商品名称',prop:'shmc'},
-        {label:'商品编号',prop:'code'},
-        {label:'库存',prop:'kc'},
-        {label:'价格',prop:'money'},
-        {label:'价格链接',prop:'link'},
-        {label:'商品类型',prop:'type'},
+        {label:'商品名称',prop:'Name'},
+        {label:'商品编号',prop:'Code'},
+        {label:'价格',prop:'Price'},
+        {label:'限量',prop:'LimitNum'},
+        {label:'库存',prop:'stockNum'},
+        {label:'创建时间',prop:'CreateDateTime'},
+        {label:'售卖开始时间',prop:'StartDateTime'},
+        {label:'预售结束时间',prop:'EndDateTime'},
+        {label:'封面',prop:'FrontImage',slot:true},
+        {label:'描述信息',prop:'Description'},
+        {label:'购买须知',prop:'PurchaseNote'},
+        {label:'售卖方式',prop:'SaleModeID'},
+        {label:'状态',prop:'Status',slot:true},
+        {label:'有赞链接',prop:'YouzanUrl'},
+        {label:'发行方名称',prop:'ReleaseUserName'},
+        {label:'创作方姓名',prop:'AuthorName'},
+        {label:'品牌方名称',prop:'BrandName'},
+        {label:'系列',prop:'SerialType'},
+        {label:'商品图片',prop:'AttachmentList',slot:true},
         {label:'操作',prop:'actions',fixed:'right',width:320},
       ]
     },
@@ -145,6 +202,12 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-
+<style lang="scss" scoped>
+ /deep/ .el-radio__input.is-checked+.el-radio__label {
+    color: red !important;
+}
+ /deep/ .el-radio__input.is-checked .el-radio__inner {
+    border-color: red !important;
+    background: red !important;
+}
 </style>

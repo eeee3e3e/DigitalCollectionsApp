@@ -129,7 +129,8 @@ export const getRequest = (url, params) => {
     params: params,
     headers: {
       "Content-Type": "multipart/form-data",
-      accessToken: accessToken
+      accessToken: accessToken,
+      "Authorization":`authorization ${accessToken}`
     }
   });
 };
@@ -145,32 +146,16 @@ export const postUploadRequest = (url, params) =>{
     }
   });
 }
-export const postRequest = (url, params, headers) => {
+export const postRequest = (url, params) => {
   let accessToken = getStore("accessToken");
   return service({
     method: "post",
     url: `${url}`,
     data: params,
-    transformRequest: headers
-      ? undefined
-      : [
-          function(data) {
-            let ret = "";
-            for (let it in data) {
-              ret +=
-                encodeURIComponent(it) +
-                "=" +
-                encodeURIComponent(data[it]) +
-                "&";
-            }
-            ret = ret.substring(0, ret.length - 1);
-            return ret;
-          }
-        ],
     headers: {
       "Content-Type": "application/json",
       accessToken: accessToken,
-      ...headers
+      "Authorization":`authorization ${accessToken}`
     }
   });
 };
@@ -253,7 +238,9 @@ export const deleteRequest = (url, params) => {
     url: `${url}`,
     params: params,
     headers: {
-      accessToken: accessToken
+      "Content-Type": "application/json",
+      accessToken: accessToken,
+      "Authorization":`authorization ${accessToken}`
     }
   });
 };

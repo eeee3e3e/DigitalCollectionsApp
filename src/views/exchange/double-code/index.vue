@@ -6,20 +6,29 @@
      </template>
      <!-- 表格主体 -->
      <template slot="table">
-       <m-table v-loading="loading" selection hideRightMenu :data="data" :headers="tableHeaders"
-       :rowKey="+new Date() + ''"
-       :pageKey="'pageNumber'"
+       <m-table v-loading="loading"  hideRightMenu :data="data" :headers="tableHeaders"
+       :rowKey="tableRowKeys"
        :pageParams="pageParams"
        :pagination="pagination"
        :refreshDom="refreshDom"
+       @pageChange="pageChange"
        @edit="edit">
          <template slot="tableMenuLeft">
+         </template>
+         <template slot="IsUsed" slot-scope="scope">
+           <div v-if="scope.row.IsUsed === true">已兑换</div>
+           <div v-if="scope.row.IsUsed === false">未兑换</div>
+         </template>
+         <template slot="Category" slot-scope="scope">
+           <div v-if="scope.row.Category === 'single'">一码一兑</div>
+           <div v-if="scope.row.Category === 'multiple'">一码多兑</div>
          </template>
        </m-table>
      </template>
    </table-page>
 </template>
 <script>
+import { GetCommodityDetailsByTypeSingle } from "@/api/goods.js";
 import search from './search'
 export default {
   components:{search},
@@ -28,12 +37,13 @@ export default {
       loading:false,
       refreshDom:+new Date(),
       pagination:{
-        total:0
+        TotalCount:0
       },
       pageParams:{
-        pageNumber:1,
+        pageIndex:1,
         pageSize:10
       },
+      queryParams:{},
       showSearch:true,
       expandSearch:true,
       data:[]
@@ -43,34 +53,40 @@ export default {
     this.getList()
   },
   methods: {
+    pageChange (v) {
+      this.pageParams.pageIndex = v.pageIndex
+      this.pageParams.pageSize = v.pageSize
+      this.getList()
+    },
     // 获取数据
     getList () {
-      // this.loading = true
-      // getList().then(res=>{
-        // const {items} =res
-        // this.data = items.map(val=>({
-        //   ...val
-        // }))
-        const dataCopy = [
-          {shmc:'数字货币',code:'SZHB435345232',scbh:'23453463',time:'2022-04-26',isExchange:'是'}
-        ]
-        this.data = dataCopy.map(val=>({
+      const queryParams = {
+          comodityCode:this.queryParams.comodityCode || '',
+          ...this.pageParams
+        }
+      this.loading = true
+      GetCommodityDetailsByTypeSingle(queryParams).then(res=>{
+        const {Data,TotalCount} =res
+        this.data = Data.map(val=>({
           ...val,
           actions:[{label:'删除',handleClickName:'edit'}]
-        }))
+        })).filter((item)=>{
+          return  item.Category === 'multiple'
+        })
+        this.pagination.TotalCount = Number(TotalCount)
         this.loading = false
-      // })
+    })
     },
     edit () {
 
     },
     // 搜索按钮操作
-    handleQuery () {
-
+    handleQuery (params) {
+      this.queryParams = {...params}
     },
     //  重置按钮操作
-    resetQuery () {
-      this.searchParams = {}
+    resetQuery (params) {
+      this.queryParams = {...params}
       this.getList()
     },
     toggleSearch () {
@@ -84,17 +100,19 @@ export default {
   computed: {
     tableHeaders () {
       return [
-        {label:'商品名称',prop:'shmc'},
-        {label:'商品编号',prop:'code'},
-        {label:'生成码编号',prop:'scbh'},
-        {label:'创建时间',prop:'time'},
-        {label:'是否兑换',prop:'isExchange'},
+        {label:'商品ID',prop:'CommodityID'},
+        {label:'商品名称',prop:'CommodityName'},
+        {label:'商品编号',prop:'CommodityCode'},
+        {label:'兑换码',prop:'CommodityDetailsCode'},
+        {label:'类别',prop:'Category',slot:true},
+        {label:'创建时间',prop:'CreateTime'},
+        {label:'是否兑换',prop:'IsUsed',slot:true},
         {label:'操作',prop:'actions',fixed:'right',width:120},
       ]
     },
-    // tableRowKeys () {
-    //   return code
-    // }
+    tableRowKeys () {
+      return 'ID'
+    }
   }
 }
 </script>

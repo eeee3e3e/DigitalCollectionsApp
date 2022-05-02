@@ -4,6 +4,8 @@ import zhLocale from './lang/zh-CN';
 import enLocale from './lang/en-US';
 import zhCnLocale from 'view-design/src/locale/lang/zh-CN';
 import enUsLocale from 'view-design/src/locale/lang/en-US';
+import elementEnLocale from 'element-ui/lib/locale/lang/en';
+import elementZhLocale from 'view-design/src/locale/lang/zh-CN';
 
 Vue.use(VueI18n);
 
@@ -18,11 +20,14 @@ Vue.config.lang = lang;
 Vue.locale = () => { };
 const messages = {
     'zh-CN': Object.assign(zhCnLocale, zhLocale),
-    'en-US': Object.assign(enUsLocale, enLocale)
+    'en-US': Object.assign(enUsLocale, enLocale),
+    'zh-CN': Object.assign(elementZhLocale, elementZhLocale),
+    'en-US': Object.assign(elementEnLocale, elementEnLocale)
 };
 const i18n = new VueI18n({
     locale: lang,
-    messages
+    messages,
+    silentFallbackWarn:true
 });
 
 export default i18n;

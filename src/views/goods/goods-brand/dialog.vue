@@ -1,32 +1,35 @@
 <template>
-<el-dialog title="" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false" append-to-body :close-on-press-escape="false" :before-close="handleClose">
+<el-dialog :title="title" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false" append-to-body :close-on-press-escape="false" :before-close="handleClose">
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="banner名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form-item label="banner名称" prop="Name">
+    <el-input v-model="ruleForm.Name"></el-input>
   </el-form-item>
-  <el-form-item label="商品ID">
-    <el-input v-model="ruleForm.name"></el-input>
+  <el-form-item label="Banner类别">
+    <el-radio v-model="ruleForm.Category" label="首页" >首页</el-radio>
+    <el-radio v-model="ruleForm.Category" label="会员中心" >会员中心</el-radio>
   </el-form-item>
-   <el-form-item label="banner图标">
-          <el-upload
-            ref="upload"
+  <el-form-item label="Linkurl" prop="LinkUrl">
+    <el-input v-model="ruleForm.LinkUrl"></el-input>
+  </el-form-item>
+   <el-form-item label="上传图片" prop="ImgUrl">
+     <el-upload
+            ref="uploads"
             action=""
             list-type="picture-card"
-            :on-change="UploadImage"
-            :limit="1"
-            :file-list="fileList"
+            :on-preview="handlePictureCardPreviewf"
+            :on-remove="handleRemovef"
+            :on-change="UploadImagef"
+            :file-list="ImgUrl"
             :auto-upload="false"
+            :limit="1"
         >
           <i class="el-icon-plus"></i>
           <template #tip>
             <div style="font-size: 12px;color: #919191;">
-              单次限制上传一张图片
+              单次限制上传一张图片且封面只能上传一张
             </div>
           </template>
         </el-upload>
-      <el-dialog :visible.sync="dialogV">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
   </el-form-item>
   <el-form-item style="text-align:center;">
     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -36,17 +39,31 @@
 </el-dialog>
 </template>
 <script>
+import { uploadCity,AddBanner } from "@/api/index";
 export default {
   name:'editShop',
   props:{
     showAddDialog: {
       type:Boolean,
       default:false
+    },
+     content:{
+      type:Object,
+      default:{}
+    },
+     title:{
+      type:String,
+      default:''
     }
   },
   data () {
     return {
-      fileList:[],
+      ImgUrl:[],
+      Category:'',
+       optionsCommodityTypeID:[],
+      optionsSaleModeID:[],
+      AttachmentList:[],
+          FrontImage:[{url:''}],
       fileLists:[],
       disabled:false,
       dialogV:false,
@@ -54,38 +71,29 @@ export default {
       dialogVs:false,
       dialogImageUrls:'',
       dialogVisible: false,
+      fileList:[],
+      disabled:false,
+      dialogV:false,
+      dialogImageUrl:'',
       ruleForm: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+        ID:'',
+          Name: '',
+          Category: '',
+          LinkUrl: '',
+          ImgUrl: ''
         },
         rules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          Name: [
+            { required: true, message: '请输入banner名称', trigger: 'blur' }
           ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
+          Category: [
+            { required: true, message: '请选择banner类别', trigger: 'change' }
           ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          LinkUrl: [
+            { required: true, message: '请输入LinkUrl', trigger: 'blur'}
           ],
-          date2: [
-            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-          ],
-          type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-          ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
-          ],
-          desc: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
+          ImgUrl: [
+            { required: true, message: '请上传图片', trigger: 'blur' }
           ]
         }
     }
@@ -93,37 +101,97 @@ export default {
   mounted () {
   },
   methods:{
-    UploadImage(file,filelist) {
+       ////       封面
+    //移除图片功能
+    handleRemovef(file, fileList) {
+    this.ImgUrl= []
+      this.ruleForm.ImgUrl = ''
+    },
+    //预览图片功能
+    handlePictureCardPreviewf(file) {
+      this.dialogV = true
+      this.dialogImageUrl = file.url
+
+    },
+    UploadImagef(file,filelist) {
       //console.log(file);
       let fd = new FormData()
-      fd.append('file', file.raw) //传给后台接收的名字 file
-      // axios.post('/upload/image', fd, {headers: {'Content-Type': 'multipart/form-data'}}).then(response => {
-      //   //上传成功后返回的数据,
-      //   console.log("上传图片到:"+response.data);
-      //   // 将图片地址给到表单.
-      //   this.ruleForm.image=response.data
-      // })
+      fd.append('files', file.raw)
+      uploadCity(file.name,fd).then(res=>{
+        this.ruleForm.ImgUrl = res.Data
+      })
 
     },
     handleClose () {
+      this.ImgUrl = []
+      this.ID = '',
+           this.ruleForm.Name = '',
+          this.ruleForm.Category = '',
+          this.ruleForm.LinkUrl = '',
+          this.ruleForm.ImgUrl = ''
+          this.dialogVisible = true
         this.$refs['ruleForm'].resetFields()
         this.dialogVisible = false
         this.$emit('close')
-      }
+      },
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            AddBanner(this.ruleForm).then(res=>{
+              this.dialogVisible = false
+               this.$emit('close')
+              this.ImgUrl = []
+              this.ID = '',
+           this.ruleForm.Name = '',
+          this.ruleForm.Category = '',
+          this.ruleForm.LinkUrl = '',
+          this.ruleForm.ImgUrl = ''
+            })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
   },
   watch :{
     showAddDialog (val) {
-      console.log('33')
       if (val) {
-        this.dialogVisible = true
+        if (this.title === '编辑') {
+          this.ruleForm = {...this.content}
+          this.ImgUrl = []
+          console.log('this.content.ImgUrl',this.content.ImgUrl)
+          if (this.content.ImgUrl !== '' && this.content.ImgUrl !== 'string') {
+            this.ImgUrl = [{url:''}]
+             this.ImgUrl[0].url = `http://82.156.240.41:9008/${this.content.ImgUrl}`
+          } else {
+            this.ImgUrl = []
+          }
+          this.dialogVisible = true
+        } else {
+          this.ID = ''
+          this.ImgUrl = []
+           this.ruleForm.Name = '',
+          this.ruleForm.Category = '',
+          this.ruleForm.LinkUrl = '',
+          this.ruleForm.ImgUrl = ''
+          this.dialogVisible = true
+        }
       }
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .el-button--primary{
     background: red;
     border-color: red;
   }
+   /deep/ .el-radio__input.is-checked+.el-radio__label {
+    color: red !important;
+}
+ /deep/ .el-radio__input.is-checked .el-radio__inner {
+    border-color: red !important;
+    background: red !important;
+}
 </style>

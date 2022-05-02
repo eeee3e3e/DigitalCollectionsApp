@@ -44,7 +44,7 @@
       </el-table>
       <!-- 分页 -->
       <div :ref="refTable +'Pagination'" class="pagination-content">
-        <pagination v-show="pagination.total" :total="pagination.total || 0" :page.sync="pageParams[pageKey]" :limit.sync="pageParams[limitKey]" @pagination="pageChange"></pagination>
+        <pagination v-if="pagination.TotalCount" :total="pagination.TotalCount || 0" :page.sync="pageParams[pageKey]" :limit.sync="pageParams[limitKey]" @pagination="pageChange"></pagination>
       </div>
   </div>
 </template>
@@ -90,7 +90,7 @@ export default {
     },
     pageKey:{
       type:String,
-      default:'pageNum'
+      default:'pageIndex'
     },
     limitKey:{
       type:String,
@@ -103,7 +103,7 @@ export default {
     pageParams:{
       type:Object,
       default: ()=>({
-        pageNum:1,
+        pageIndex:1,
         pageSize:10
       })
     },
@@ -126,6 +126,7 @@ export default {
 
   },
   mounted () {
+    console.log(this.pagination)
     this.computeHeight()
     // this.$bus.$on('onHandleClick',this.onHandleClick)
     window.addEventListener('resize',this.computeHeight)
@@ -231,6 +232,7 @@ export default {
     }
     .pagination-content {
       text--align:right;
+      width:100%;
       .pagination-container {
         padding:16px;
       }

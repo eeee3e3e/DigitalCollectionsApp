@@ -1,5 +1,5 @@
 // 统一请求路径前缀在libs/axios.js中修改
-import { getRequest, postRequest, putRequest, deleteRequest} from '@/libs/axios';
+import { getRequest, postRequest, putRequest, deleteRequest,postUploadRequest} from '@/libs/axios';
 
 //  获取商品品牌分页列表
 export const getManagerBrandPage = (params) => {
@@ -10,8 +10,42 @@ export const getManagerBrandPage = (params) => {
 export const delBrand = (ids) =>{
   return deleteRequest(`/goods/brand/delByIds/${ids}`)
 }
-
-
+// 获取售卖方式
+export const GetSaleModeList = (params) => {
+  return getRequest('/api/Dictionary/GetSaleModeList', params)
+}
+// 城市数藏一码多兑附件上传
+export const CreateCommodityDetailsMultiple = (commodityID,params) => {
+  return postUploadRequest(`/api/CommodityDetails/CreateCommodityDetailsMultiple?commodityID=${commodityID}`,params);
+};
+// 城市数藏一码yi兑附件上传
+export const CreateCommodityDetailsSingle = (params) => {
+  return postRequest(`/api/CommodityDetails/CreateCommodityDetailsSingle`,params);
+};
+// 获取商品类型
+export const GetCommodityTypeListAll = (params) => {
+  return getRequest('/api/Dictionary/GetCommodityTypeListAll', params)
+}
+// 城市数藏 添加商品
+export const addCommodity = (params) => {
+  return postRequest('/api/Commodity/AddCommodity', params)
+}
+// 城市数藏  商品列表获取
+export const GetCommodityListBack = (queryParams) => {
+  return getRequest(`/api/Commodity/GetCommodityListBack?name=${queryParams.name}&code=${queryParams.code}&status=${queryParams.status}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+};
+// 城市数藏一码一兑的兑换码列表
+export const GetCommodityDetailsByTypeSingle = (queryParams) => {
+  return getRequest(`/api/CommodityDetails/GetCommodityDetailsByTypeSingle?comodityCode=${queryParams.comodityCode}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+};
+// 城市数藏 删除商品明细（验证码删除）
+export const DeleteCommodityDetails = (ids) =>{
+  return deleteRequest(`/api/CommodityDetails/DeleteCommodityDetails?id=${ids}`)
+}
+// 商品下架
+export const CommodityOffLine = (params) => {
+  return postRequest(`/api/Commodity/CommodityOffLine/?id=${params}`)
+}
 //  添加
 export const addBrand = (params) => {
     return postRequest('/goods/brand', params)
