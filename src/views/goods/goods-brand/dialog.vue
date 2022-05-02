@@ -132,7 +132,7 @@ export default {
           this.dialogVisible = true
         this.$refs['ruleForm'].resetFields()
         this.dialogVisible = false
-        this.$emit('close')
+        // this.$emit('close')
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {

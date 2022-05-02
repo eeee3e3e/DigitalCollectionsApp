@@ -309,7 +309,7 @@ export default {
             }
           }
         this.dialogVisible = false
-        this.$emit('close')
+        // this.$emit('close')
       }
   },
   watch :{
