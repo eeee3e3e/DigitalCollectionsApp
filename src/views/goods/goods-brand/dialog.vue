@@ -59,6 +59,7 @@ export default {
   data () {
     return {
       ImgUrl:[],
+      userInfo:{},
       Category:'',
        optionsCommodityTypeID:[],
       optionsSaleModeID:[],
@@ -76,7 +77,7 @@ export default {
       dialogV:false,
       dialogImageUrl:'',
       ruleForm: {
-        ID:'',
+          ID:userInfo.ID,
           Name: '',
           Category: '',
           LinkUrl: '',
@@ -99,6 +100,8 @@ export default {
     }
   },
   mounted () {
+    let userInfo = JSON.parse(Cookies.get("userInfoManager"));
+      this.userInfo = userInfo;
   },
   methods:{
        ////       封面
@@ -124,7 +127,6 @@ export default {
     },
     handleClose () {
       this.ImgUrl = []
-      this.ID = '',
            this.ruleForm.Name = '',
           this.ruleForm.Category = '',
           this.ruleForm.LinkUrl = '',
@@ -142,7 +144,6 @@ export default {
               this.dialogVisible = false
                this.$emit('close')
               this.ImgUrl = []
-              this.ID = '',
            this.ruleForm.Name = '',
           this.ruleForm.Category = '',
           this.ruleForm.LinkUrl = '',
@@ -169,7 +170,6 @@ export default {
           }
           this.dialogVisible = true
         } else {
-          this.ID = ''
           this.ImgUrl = []
            this.ruleForm.Name = '',
           this.ruleForm.Category = '',

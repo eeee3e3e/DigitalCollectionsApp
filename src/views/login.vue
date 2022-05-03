@@ -44,7 +44,7 @@ export default {
   components: {
     LangSwitch,
     Header,
-    Footer,
+    Footers:Footer,
     verify
   },
   data() {
@@ -108,10 +108,9 @@ export default {
       this.loading = true
       const paraams={
             LoginName:this.form.username,
-            Password:this.form.password
+            Password:this.md5(this.form.password)
           }
           login(paraams).then(res=>{
-            console.log('登录',res.Data)
             const {Ticket,ID} = res.Data
             this.userId = ID
             let accessToken = Ticket

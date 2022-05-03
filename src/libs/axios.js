@@ -7,7 +7,6 @@ import { handleRefreshToken } from "../api/index";
 import {v4 as uuidv4} from 'uuid';
 
 // 统一请求路径前缀
-console.log('===',process.env.NODE_ENV)
 export const managerUrl =
   (process.env.NODE_ENV === "development"
     ? BASE.API_DEV.manager
