@@ -24,17 +24,21 @@
          </template>
          <template slot="FrontImage" slot-scope="scope">
            <div class="imgbox">
-              <img class="img" :src="`${url}${scope.row.FrontImage}`" alt="">
+              <img class="img" :src="`${url}${scope.row.FrontImage}`" @error="headError"  alt="">
            </div>
          </template>
          <template slot="AttachmentList" slot-scope="scope">
            <div style="width:80px;height:80px;overflow:hidden;">
-              <img v-for="(item,index) in scope.row.AttachmentList" :key="index" :src="`${url}${item}`" alt="">
+              <img v-for="(item,index) in scope.row.AttachmentList" :key="index" @error="headError" :src="`${url}${item}`" alt="">
            </div>
          </template>
          <template slot="Status" slot-scope="scope">
             <el-tag v-if="scope.row.Status === 'online'"  type="success">正常</el-tag>
             <el-tag v-if="scope.row.Status === 'offline'" type="danger">下架</el-tag>
+         </template>
+         <template slot="SaleModeID" slot-scope="scope">
+            <el-tag v-if="scope.row.SaleModeID === '1'"  type="success">预售</el-tag>
+            <el-tag v-if="scope.row.SaleModeID === '2'" type="danger">盲盒</el-tag>
          </template>
        </m-table>
      </template>
@@ -78,6 +82,9 @@ export default {
     this.url = BASE.API_DEV.manager
   },
   methods: {
+     headError(e) {
+        e.target.src = require("@/assets/404.png");
+      },
     addShop () {
       this.title = '新增'
       this.content = {}
@@ -195,10 +202,10 @@ export default {
         {label:'创建时间',prop:'CreateDateTime'},
         {label:'售卖开始时间',prop:'StartDateTime'},
         {label:'预售结束时间',prop:'EndDateTime'},
-        {label:'封面',prop:'FrontImage',slot:true},
+        {label:'封面',prop:'FrontImage',width:220,slot:true},
         {label:'描述信息',prop:'Description'},
         {label:'购买须知',prop:'PurchaseNote'},
-        {label:'售卖方式',prop:'SaleModeID'},
+        {label:'售卖方式',prop:'SaleModeID',slot:true},
         {label:'状态',prop:'Status',slot:true},
         {label:'有赞链接',prop:'YouzanUrl'},
         {label:'发行方名称',prop:'ReleaseUserName'},
