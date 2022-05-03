@@ -99,7 +99,7 @@ export default {
         const queryParams = {
           name:this.queryParams.name || '',
           code:this.queryParams.code || '',
-          status:this.queryParams.code || '',
+          status:this.queryParams.status || '',
           ...this.pageParams
         }
         console.log(queryParams)

@@ -57,7 +57,11 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
+/deep/ .el-select-dropdown__item.selected {
+  color: red;
+  font-weight: 700;
+}
     .el-form-inline .el-form-item {
       vertical-align: middle;
     }
