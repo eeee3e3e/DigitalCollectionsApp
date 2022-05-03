@@ -22,7 +22,7 @@
             </el-form-item> -->
             <div style="width:100%;text-align:right;margin-top:35px">
               <el-button v-if="radio=== '2'"  type="primary" @click="submitForm('ruleForm')">提交</el-button>
-              <el-button type="primary" @click="handleClose">取消</el-button>
+              <el-button type="primary" @click="handleClose">关闭</el-button>
             </div>
   </el-form-item>
     </el-form>
@@ -116,6 +116,10 @@ export default {
         if (res.ReturnCode === '200') {
           this.radio = '1'
         this.ruleForm.fileList= res.Data
+          this.$message({
+                message: '一码多兑成功',
+                type: 'success'
+          });
         }else {
           this.ruleForm.fileList = ''
               this.radio === '1'
