@@ -39,6 +39,7 @@
 </el-dialog>
 </template>
 <script>
+import Cookies from "js-cookie";
 import { uploadCity,AddBanner } from "@/api/index";
 export default {
   name:'editShop',
@@ -77,7 +78,7 @@ export default {
       dialogV:false,
       dialogImageUrl:'',
       ruleForm: {
-          ID:userInfo.ID,
+          ID: '',
           Name: '',
           Category: '',
           LinkUrl: '',
@@ -101,6 +102,7 @@ export default {
   },
   mounted () {
     let userInfo = JSON.parse(Cookies.get("userInfoManager"));
+    this.ruleForm.ID =  userInfo.ID
       this.userInfo = userInfo;
   },
   methods:{
