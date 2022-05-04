@@ -20,7 +20,6 @@
             <span v-else>{{ $t("logining") }}</span>
           </Button>
         </Row>
-           <div style="text-align:center;color:red;margin-top:8px;">{{loginStatus}}</div>
       </Row>
       <!-- 拼图验证码 -->
       <!-- <verify ref="verify" class="verify-con" verifyType="LOGIN" @change="verifyChange"></verify> -->
@@ -113,17 +112,20 @@ export default {
           }
           login(paraams).then(res=>{
             if (res.ReturnCode === '200') {
+              this.$message({
+                type:'success',
+                message:'登录成功'
+              })
               const {Ticket,ID} = res.Data
             this.userId = ID
             let accessToken = Ticket
             this.setStore("accessToken", accessToken);
           this.afterLogin(this.userId)
             } else {
-              this.loginStatus = '请输入正确的账号密码'
               this.loading = false
               this.$message({
-                type:error,
-                message:'登录失败'
+                type:'error',
+                message:'请输入正确的账号密码'
               })
               return false
             }
