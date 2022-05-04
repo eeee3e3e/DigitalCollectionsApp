@@ -122,7 +122,7 @@ export default {
           });
           const file = `${BASE.API_DEV.manager}${res.Data}`
           this.download('一码多兑',file)
-          this.$router.push('/exchange/double')
+          // this.$router.push('/exchange/double')
         }else {
           this.ruleForm.fileList = ''
               this.radio === '1'
