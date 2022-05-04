@@ -15,6 +15,7 @@
                 :auto-upload="false"
                 >
                 <el-button size="small" type="primary">点击上传</el-button>
+                <span style="pading-left:5px;">&nbsp;&nbsp;*上传后立即生效</span>
                 </el-upload>
              </el-form-item>
              <!-- <el-form-item v-if="this.radio === '2'" label="生成数量" prop="CommodityID">
@@ -109,7 +110,6 @@ export default {
         });
       },
       UploadFile(file,filelist) {
-      //console.log(file);
       let fd = new FormData()
       fd.append('files', file.raw)
       CreateCommodityDetailsMultiple(this.commodityID,fd).then(res=>{
@@ -120,6 +120,9 @@ export default {
                 message: '一码多兑成功',
                 type: 'success'
           });
+          const file = `${BASE.API_DEV.manager}${res.Data}`
+          this.download('一码多兑',file)
+          this.$router.push('/exchange/double')
         }else {
           this.ruleForm.fileList = ''
               this.radio === '1'

@@ -28,7 +28,7 @@
     <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.Price"></el-input>
   </el-form-item>
   <el-form-item label="限量" prop="LimitNum">
-    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.LimitNum"></el-input>
+    <el-input  :disabled="this.title === '查看商品详情' || this.title === '编辑' " v-model="ruleForm.LimitNum"></el-input>
   </el-form-item>
    <el-form-item label="系列" prop="SerialType">
     <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.SerialType"></el-input>
