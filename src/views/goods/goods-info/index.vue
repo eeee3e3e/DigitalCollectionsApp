@@ -27,6 +27,9 @@
               <img class="img" :src="`${url}${scope.row.FrontImage}`" @error="headError"  alt="">
            </div>
          </template>
+         <template slot="Description" slot-scope="scope">
+           <div style="width:150px;height:80px;" v-html="scope.row.Description"></div>
+         </template>
          <template slot="AttachmentList" slot-scope="scope">
            <div style="width:80px;height:80px;overflow:hidden;">
               <img v-for="(item,index) in scope.row.AttachmentList" :key="index" @error="headError" :src="`${url}${item}`" alt="">
@@ -203,7 +206,7 @@ export default {
         {label:'售卖开始时间',prop:'StartDateTime'},
         {label:'预售结束时间',prop:'EndDateTime'},
         {label:'封面',prop:'FrontImage',width:220,slot:true},
-        {label:'描述信息',prop:'Description'},
+        {label:'描述信息',prop:'Description',slot:true,width:220},
         {label:'购买须知',prop:'PurchaseNote'},
         {label:'售卖方式',prop:'SaleModeID',slot:true},
         {label:'状态',prop:'Status',slot:true},

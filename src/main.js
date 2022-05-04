@@ -18,7 +18,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import { getRequest, postRequest, putRequest, deleteRequest, importRequest, uploadFileRequest } from '@/libs/axios'
 import { setStore, getStore, removeStore } from '@/libs/storage'
 import util from '@/libs/util'
-
+import VueQuillEditor from 'vue-quill-editor'
+// require styles 引入样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 import * as filters from '@/utils/filters' // global filter
 import {md5} from '@/utils/md5.js';
 Vue.config.devtools = true;

@@ -102,7 +102,13 @@
       </el-dialog>
   </el-form-item>
   <el-form-item label="描述信息" prop="Description">
-    <el-input  :disabled="this.title === '查看商品详情'" type="textarea" v-model="ruleForm.Description"></el-input>
+  <div class="quill-editor">
+    <!-- 图片上传组件辅助，组件内添加v-show=“false”属性，把该组件隐藏起来。-->
+    <el-upload v-show="false" class="avatar-uploader" action name="img" :show-file-list="false" :before-upload="editor_change">
+    </el-upload>
+    <!--富文本编辑器组件-->
+    <quill-editor v-model="ruleForm.Description"   :options="editorOption"  ref="QuillEditor"></quill-editor>
+  </div>
   </el-form-item>
   <el-form-item style="text-align:center;">
     <el-button type="primary"  :disabled="this.title === '查看商品详情'" @click="submitForm('ruleForm')">提交</el-button>
@@ -112,11 +118,21 @@
 </el-dialog>
 </template>
 <script>
+    import $ from 'jquery'
 // uploadCity
+import { quillEditor } from 'vue-quill-editor'
+import quill from 'quill'
+import { Quill} from 'vue-quill-editor'
+  import {container, ImageExtend, QuillWatch} from 'quill-image-extend-module'
+
+  Quill.register('modules/ImageExtend', ImageExtend)
 import { uploadCity } from "@/api/index";
 import { addCommodity,GetSaleModeList,GetCommodityTypeListAll } from "@/api/goods.js";
 export default {
   name:'editShop',
+  components: {
+    quillEditor
+  },
   props:{
     showAddDialog: {
       type:Boolean,
@@ -133,6 +149,36 @@ export default {
   },
   data () {
     return {
+      url:'',
+      Linkurl:'',
+      editorOption:{
+        placeholder: '请在这里输入',
+        modules:{
+            toolbar:{
+              container:[
+              ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+               ['blockquote', 'code-block'],
+               ['image']
+            ],
+            history: {
+            delay: 1000,
+            maxStack: 50,
+            userOnly: false
+          },
+            handlers: {
+              'image': function (value) {
+                if (value) {
+                  console.log('value',value)
+                  // 调用element的图片上传组件
+                  document.querySelector('.avatar-uploader input').click()
+                } else {
+                  this.quill.format('image', false)
+                }
+              }
+            },
+            }
+        }
+    },
       optionsCommodityTypeID:[],
       optionsSaleModeID:[],
       AttachmentList:[],
@@ -220,7 +266,13 @@ export default {
   mounted () {
     this.GetSaleModeList()
     this.GetCommodityTypeListAll()
+    this.Linkurl = BASE.API_DEV.manager
   },
+  computed: {
+	       editor() {
+	            return this.$refs.myQuillEditor.quill;
+	        },
+	    },
   methods:{
     GetSaleModeList () {
       GetSaleModeList().then(res=>{
@@ -262,6 +314,42 @@ export default {
         this.ruleForm.AttachmentList.push(res.Data)
 
       })
+
+    },
+    // 富文本上传图片
+    editor_change (file) {
+        let fd = new FormData()
+      fd.append('files', file)
+      uploadCity(file.name,fd).then(res=>{
+          const url = res.Data
+          let quill = this.$refs.QuillEditor.quill
+      // 如果上传成功
+      if (url) {
+        let length = quill.getSelection().index;
+        // 插入图片，res为服务器返回的图片链接地址
+        console.log('---',`${this.Linkurl}${url}`)
+        quill.insertEmbed(length, 'image', `${this.Linkurl}${url}`)
+        // 调整光标到最后
+        quill.setSelection(length + 1)
+      } else {
+        // 提示信息，需引入Message
+        this.$message.error('图片插入失败！')
+      }
+      })
+    },
+    // 失去焦点
+    onEditorBlur (editor) { },
+    // 获得焦点
+    onEditorFocus (editor) { },
+    // 开始
+    onEditorReady (editor) { },
+    // 值发生变化
+    onEditorChange (editor) {
+      this.ruleForm.Description = editor.html
+    },
+    beforeUpload (file) { },
+    uploadSuccess (res) {
+      // 获取富文本组件实例
 
     },
        ////       封面

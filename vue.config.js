@@ -43,7 +43,7 @@ let cdn = {
     "https://cdn.jsdelivr.net/npm/dplayer@1.25.0/dist/DPlayer.min.js",
     "https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js",
     "https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js",
-    "https://gw.alipayobjects.com/os/lib/antv/g2/4.1.24/dist/g2.min.js"
+    "https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"
   ]
 };
 

@@ -141,7 +141,7 @@ export default {
     },
   },
   destroyed () {
-    document.document.createElement('a').remove()
+    document.createElement('a').remove()
   },
   watch :{
     showAddDialogs (val) {
