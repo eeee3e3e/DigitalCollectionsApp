@@ -78,7 +78,12 @@ export default {
     })
     },
     edit (row) {
-      DeleteCommodityDetails(row.ID).then(res=>{
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          DeleteCommodityDetails(row.ID).then(res=>{
          if (res.ReturnCode === '200') {
             this.$message({
               message: '一码多兑的兑换码列表删除成功',
@@ -92,6 +97,12 @@ export default {
         });
         }
       })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
     },
     // 搜索按钮操作
     handleQuery (params) {
