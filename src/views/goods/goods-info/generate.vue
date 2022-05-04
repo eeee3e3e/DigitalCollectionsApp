@@ -140,6 +140,9 @@ export default {
 
     },
   },
+  destroyed () {
+    document.document.createElement('a').remove()
+  },
   watch :{
     showAddDialogs (val) {
       if (val) {
