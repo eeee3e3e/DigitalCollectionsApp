@@ -20,7 +20,7 @@
             <span v-else>{{ $t("logining") }}</span>
           </Button>
         </Row>
-
+           <div style="text-align:center;color:red;margin-top:8px;">{{loginStatus}}</div>
       </Row>
       <!-- 拼图验证码 -->
       <!-- <verify ref="verify" class="verify-con" verifyType="LOGIN" @change="verifyChange"></verify> -->
@@ -51,6 +51,7 @@ export default {
     return {
       userId:'',
       loading: false, // 加载状态
+      loginStatus:'',
       form: {
         // 表单数据
         username: "",
@@ -111,11 +112,21 @@ export default {
             Password:this.md5(this.form.password)
           }
           login(paraams).then(res=>{
-            const {Ticket,ID} = res.Data
+            if (res.ReturnCode === '200') {
+              const {Ticket,ID} = res.Data
             this.userId = ID
             let accessToken = Ticket
             this.setStore("accessToken", accessToken);
           this.afterLogin(this.userId)
+            } else {
+              this.loginStatus = '请输入正确的账号密码'
+              this.loading = false
+              this.$message({
+                type:error,
+                message:'登录失败'
+              })
+              return false
+            }
           })
     },
   },
