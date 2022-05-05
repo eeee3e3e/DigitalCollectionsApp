@@ -69,8 +69,7 @@ export default {
         const {Data,TotalCount} =res
         this.data = Data.map(val=>({
           ...val,
-          actions:[{label:'删除',handleClickName:'edit'},
-          {label:'手工上链',handleClickName:'chain'}
+          actions:[{label:'删除',handleClickName:'edit'}
           ]
         })).filter((item)=>{
           return  item.Category === 'multiple'
@@ -103,23 +102,6 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });
-        });
-    },
-    chain () {
-      this.$confirm('此操作将手工上链成功, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '上链成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '上链成失败'
           });
         });
     },

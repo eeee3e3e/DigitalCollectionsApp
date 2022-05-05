@@ -2,8 +2,10 @@
   <el-row style="height:100%;">
     <el-col :span="4" :style="{height:this.autoHeight}">
       <el-card  ref="listNav" style="border:1px solid #ccc;width:100%;height:100%;overflow:scroll;padding: 0 16px 16px;margin-top:16px;box-sizing: border-box;">
-        <ul>
-                <li v-for="(value,index) in  Array.from({length:10})" ::key="index">{{index}}</li>
+        <ul class="ul">
+                <li  v-for="(item,index) in  Navdata" ::key="index"
+                :class="{ 'active':item.ID==current}"
+                 @click="addactive(item)">{{item.Name}}</li>
               </ul>
       </el-card>
 
@@ -22,29 +24,17 @@
        :limitKey="'pageSize'"
        :pageParams="pageParams"
        :pagination="pagination"
-       :refreshDom="refreshDom">
+       :refreshDom="refreshDom"
+       @manual="manual">
          <template slot="tableMenuLeft">
          </template>
-         <template slot="FrontImage" slot-scope="scope">
-           <div class="imgbox">
-              <img class="img" :src="`${url}${scope.row.FrontImage}`" @error="headError"  alt="">
-           </div>
+         <template slot="redectDDCID" slot-scope="scope">
+            <span v-if="scope.row.redectDDCID === 'null'"  type="success">否</span>
+            <span v-else >是</span>
          </template>
-         <template slot="Description" slot-scope="scope">
-           <div style="width:150px;height:80px;" v-html="scope.row.Description"></div>
-         </template>
-         <template slot="AttachmentList" slot-scope="scope">
-           <div style="width:80px;height:80px;overflow:hidden;">
-              <img v-for="(item,index) in scope.row.AttachmentList" :key="index" @error="headError" :src="`${url}${item}`" alt="">
-           </div>
-         </template>
-         <template slot="Status" slot-scope="scope">
-            <el-tag v-if="scope.row.Status === 'online'"  type="success">正常</el-tag>
-            <el-tag v-if="scope.row.Status === 'offline'" type="danger">下架</el-tag>
-         </template>
-         <template slot="SaleModeID" slot-scope="scope">
-            <el-tag v-if="scope.row.SaleModeID === '1'"  type="success">预售</el-tag>
-            <el-tag v-if="scope.row.SaleModeID === '2'" type="danger">盲盒</el-tag>
+         <template slot="OwnerUserID" slot-scope="scope">
+            <span v-if="scope.row.OwnerUserID === 'null'"  type="success">否</span>
+            <span v-else >是</span>
          </template>
        </m-table>
      </template>
@@ -53,42 +43,129 @@
   </el-row>
 </template>
 <script>
+import search from './search'
+import { GetCommodityListBack,GetExchangesList,ManualChain } from "@/api/goods.js";
 export default {
+    components:{search},
   data () {
     return {
+      current: '',
       autoHeight:null,
       loading:false,
       refreshDom:+new Date(),
       pagination:{
-        total:0
+        TotalCount:0
       },
       pageParams:{
         pageIndex:1,
         pageSize:10
       },
+      pageParamsNav:{
+        pageIndex:1,
+        pageSize:10
+      },
       queryParams:{},
+      query:{
+        commodityId:'',
+        isCCDID:undefined,
+        isExchanges:undefined
+      },
       showSearch:true,
       expandSearch:true,
       data:[],
+      Navdata:[]
     }
   },
   mounted () {
      const mTableOffsetTop = this.$refs.listNav.$el.getBoundingClientRect().top
     this.autoHeight = `calc(100vh - ${mTableOffsetTop + 35}px)`
-    console.log(this.autoHeight)
+    this.getNavList() // 获取导航栏
   },
   methods:{
+    // 动态添加类
+    addactive (item) {
+      this.current = item.ID
+      this.query.commodityId = item.ID
+      this.getList()
+    },
+     // 获取NAV
+    getNavList () {
+        const queryParams_s = {
+          name:this.queryParams.name || '',
+          code:this.queryParams.code || '',
+          status:this.queryParams.status || '',
+          ...this.pageParamsNav
+        }
+        GetCommodityListBack(queryParams_s).then(res=>{
+          this.Navdata = res.Data
+          this.current = res.Data.length > 0 ? res.Data[0].ID : ''
+          this.query.commodityId = res.Data.length > 0 ? res.Data[0].ID : ''
+          this.getList()
+        })
+    },
+    // 获取数据
+    getList () {
+      this.loading = true
+        const queryParams = {
+          commodityId:this.query.commodityId,
+          isCCDID:this.query.isCCDID || '',
+          isExchanges:this.query.isExchanges || '',
+          ...this.pageParams
+        }
+        GetExchangesList(queryParams).then(res=>{
+          const cloneData = res.Data
+          cloneData.map(c=>{
+             this.$set(c,'redectDDCID',c.DDCID)
+          })
+          this.data = cloneData.map(val=>({
+          ...val,
+          actions: [
+          {label:'手动上链',handleClickName:'manual'}]
+        }))
+        this.pagination.TotalCount =  res.TotalCount
+          this.loading = false
+        })
+    },
+    manual (row) {
+         this.$confirm('此操作将上链成功, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          ManualChain(row.CommodityDetailsID).then(res=>{
+            if (res.ReturnCode === '200') {
+              this.$message({
+            type: 'success',
+            message: '上链成功!'
+          });
+            } else {
+              this.$message({
+            type: 'error',
+            message: res.ReturnMessage
+          });
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消上链'
+          });
+        })
+    },
      // 搜索按钮操作
     handleQuery (params) {
-
-      this.queryParams = {...params}
+      this.query = {
+        commodityId:this.query.commodityId,
+        ...this.pageParams,
+        ...params,
+        }
       this.getList()
 
     },
     //  重置按钮操作
     resetQuery (params) {
-      this.queryParams = {...params}
-      // this.getList()
+      this.query = {...params}
+      this.getList()
     },
     toggleSearch () {
       this.showSearch = !this.showSearch
@@ -101,15 +178,15 @@ export default {
   computed: {
     tableHeaders () {
       return [
-        {label:'商品名称',prop:'Name'},
-        {label:'兑换码',prop:'Code'},
-        {label:'商品编号',prop:'Price'},
-        {label:'是否兑换',prop:'LimitNum'},
-        {label:'兑换者名称',prop:'StockNum'},
-        {label:'兑换者手机号',prop:'CreateDateTime'},
-        {label:'是否上链',prop:'StartDateTime'},
-        {label:'哈希值',prop:'EndDateTime'},
-        {label:'ddcid',prop:'FrontImage',width:220,slot:true},
+        {label:'商品名称',prop:'CommodityName'},
+        {label:'兑换码',prop:'CommodityDetailsCode'},
+        {label:'商品编号',prop:'CommodityNo'},
+        {label:'是否兑换',prop:'OwnerUserID',slot:true},
+        {label:'兑换者名称',prop:'OwnerUserInfo.NickName'},
+        {label:'兑换者手机号',prop:'OwnerUserInfo.MobileNo'},
+        {label:'是否上链',prop:'redectDDCID',slot:true},
+        {label:'哈希值',prop:'HashCode'},
+        {label:'ddcid',prop:'DDCID'},
         {label:'操作',prop:'actions',fixed:'right',width:220},
       ]
     },
@@ -119,6 +196,17 @@ export default {
   }
 }
 </script>
-<style lang="">
-
+<style lang="less" scoped>
+  .active {
+    color:red;
+  }
+  .ul {
+    li{
+      cursor: pointer;
+      font-size:14px;
+      font-weight: 500;
+      line-height: 36px;
+      text-align:left;
+    }
+  }
 </style>

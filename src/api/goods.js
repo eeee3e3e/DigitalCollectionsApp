@@ -25,6 +25,10 @@ export const CommodityCreateUrl = (params) => {
 export const addCommodity = (params) => {
   return postRequest('/api/Commodity/AddCommodity', params)
 }
+// 城市数藏  获取兑换列表
+export const GetExchangesList = (queryParams) => {
+  return getRequest(`/api/CommodityDetails/GetExchangesList?commodityId=${queryParams.commodityId}&isCCDID=${queryParams.isCCDID}&isExchanges=${queryParams.isExchanges}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+};
 // 城市数藏  商品列表获取
 export const GetCommodityListBack = (queryParams) => {
   return getRequest(`/api/Commodity/GetCommodityListBack?name=${queryParams.name}&code=${queryParams.code}&status=${queryParams.status}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
@@ -40,6 +44,10 @@ export const GetCommodityDetailsByTypeSingleD = (queryParams) => {
 // 城市数藏 删除商品明细（验证码删除）
 export const DeleteCommodityDetails = (ids) =>{
   return deleteRequest(`/api/CommodityDetails/DeleteCommodityDetails?id=${ids}`)
+}
+// 商品下架
+export const ManualChain = (params) => {
+  return postRequest(`/api/UserCommodityExchanges/ManualChain/?commodityDetailsId=${params}`)
 }
 // 商品下架
 export const CommodityOffLine = (params) => {

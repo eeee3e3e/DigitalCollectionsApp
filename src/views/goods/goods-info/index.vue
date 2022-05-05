@@ -33,7 +33,7 @@
          </template>
          <template slot="AttachmentList" slot-scope="scope">
            <div style="width:80px;height:80px;overflow:hidden;">
-              <img v-for="(item,index) in scope.row.AttachmentList" :key="index" @error="headError" :src="`${url}${item}`" alt="">
+              <img  class="img" v-for="(item,index) in scope.row.AttachmentList" :key="index" @error="headError" :src="`${url}${item}`" alt="">
            </div>
          </template>
          <template slot="Status" slot-scope="scope">
