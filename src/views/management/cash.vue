@@ -8,10 +8,12 @@
                  @click="addactive(item)">{{item.Name}}</li>
               </ul>
       </el-card>
-
+      <div style="text-align:center">
+         <el-pagination small layout="prev, pager, next" :total="total" @size-change="sizeChange" @current-change="handleCurrentChange"></el-pagination>
+      </div>
     </el-col>
     <el-col :span="20">
-       <table-page :showSearch="showSearch" :expandSearch="expandSearch" @toggleExpand="toggleExpand">
+       <table-page style="width:100%;" :showSearch="showSearch" :expandSearch="expandSearch" @toggleExpand="toggleExpand">
      <!-- 查询条件 -->
      <template slot="search">
        <search @search="handleQuery" @resetQuery="resetQuery"></search>
@@ -62,7 +64,7 @@ export default {
       },
       pageParamsNav:{
         pageIndex:1,
-        pageSize:10
+        pageSize:30
       },
       queryParams:{},
       query:{
@@ -73,15 +75,25 @@ export default {
       showSearch:true,
       expandSearch:true,
       data:[],
-      Navdata:[]
+      Navdata:[],
+      total:0,
     }
   },
   mounted () {
      const mTableOffsetTop = this.$refs.listNav.$el.getBoundingClientRect().top
-    this.autoHeight = `calc(100vh - ${mTableOffsetTop + 35}px)`
+    this.autoHeight = `calc(100vh - ${mTableOffsetTop + 35 + 27}px)`
     this.getNavList() // 获取导航栏
   },
   methods:{
+    sizeChange (e) {
+      this.pageParamsNav.pageSize =e
+      this.getList()
+
+    },
+    handleCurrentChange(val) {
+            this.pageParamsNav.pageIndex =e
+            this.getList()
+          },
     // 动态添加类
     addactive (item) {
       this.current = item.ID
@@ -100,6 +112,7 @@ export default {
           this.Navdata = res.Data
           this.current = res.Data.length > 0 ? res.Data[0].ID : ''
           this.query.commodityId = res.Data.length > 0 ? res.Data[0].ID : ''
+          this.total = res.TotalCount
           this.getList()
         })
     },
