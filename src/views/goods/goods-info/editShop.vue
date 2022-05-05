@@ -111,7 +111,7 @@
   </div>
   </el-form-item>
   <el-form-item style="text-align:center;">
-    <el-button type="primary"  :disabled="this.title === '查看商品详情'" @click="submitForm('ruleForm')">提交</el-button>
+    <el-button v-if="this.title !== '查看商品详情'" type="primary"   @click="submitForm('ruleForm')">提交</el-button>
     <el-button type="primary" @click="handleClose">取消</el-button>
   </el-form-item>
 </el-form>
@@ -409,6 +409,12 @@ export default {
           if (this.content.FrontImage !=='') {
             this.FrontImage = [{url:''}]
              this.FrontImage[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
+          } else {
+            this.FrontImage = []
+          }
+          if (this.content.Description !=='') {
+            console.log('this.content.Description',this.content.Description)
+            //  this.ruleForm.Description = `${BASE.API_DEV.manager}${this.content.Description}`
           } else {
             this.FrontImage = []
           }

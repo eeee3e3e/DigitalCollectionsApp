@@ -126,22 +126,6 @@ util.initRouter = function(vm) {
               path: "managerGoods",
               title: "平台商品",
             },
-            // {
-            //   children: [],
-            //   createBy: "admin",
-            //   createTime: "2022-03-22 19:13:46",
-            //   deleteFlag: false,
-            //   frontRoute: "goods/goods-release/index",
-            //   id: "1506227631720472578",
-            //   level: 2,
-            //   name: "goods-release",
-            //   parentId: "1367044376391319552",
-            //   path: "goods-release",
-            //   sortOrder: 0,
-            //   title: "商品发布",
-            //   updateBy: "admin",
-            //   updateTime: "2022-03-23 10:39:19"
-            // },
             {
               children: [],
               createBy: "admin",
@@ -156,8 +140,6 @@ util.initRouter = function(vm) {
               permission: "",
               sortOrder: 3,
               title: "单码兑换",
-              updateBy: "admin",
-              updateTime: "2022-04-21 19:11:24"
             },{
               children: [],
               createBy: "admin",
@@ -207,39 +189,37 @@ util.initRouter = function(vm) {
           path: "null",
           sortOrder: 1,
           title: "商品"},
-          // {
-          // frontRoute: "null",
-          // level: 0,
-          // id: "1367039950367700768",
-          // name: "order",
-          // parentId: "01",
-          // path: "null",
-          // sortOrder: 2,
-          // title: "订单",
-          // updateTime: "2022-04-19 09:49:05",
-          // children:[{
-          //   children: [{
-          //     children: [],
-          //     frontRoute: "order/order-shop/index",
-          //     id: "1367045529331161952",
-          //     name: "orderShop",
-          //     level: 2,
-          //     parentId: "13670455297211619552",
-          //     path: 'orderShop',
-          //     title: "商品订单",
-          //   }],
-          //   frontRoute: "Main",
-          //   id: "13670455297211619552",
-          //   name: "order",
-          //   level: 1,
-          //   parentId: "1367039950367700768",
-          //   path: '/',
-          //   title: "订单",
-          // }]
-          // }
+          {
+          frontRoute: "null",
+          level: 0,
+          id: "1367039950367700768",
+          name: "cash-management",
+          parentId: "1",
+          path: "null",
+          title: "兑换",
+          children:[{
+            children: [{
+              children: [],
+              frontRoute: "management/cash",
+              id: "1367045529331161952",
+              name: "cash-management",
+              level: 2,
+              parentId: "13670455297211619552",
+              path: 'cash-management',
+              title: "兑换管理",
+            }],
+            frontRoute: 'Main',
+            id: "13670455297211619552",
+            name: "cash-management",
+            level: 1,
+            parentId: "1367039950367700768",
+            path: '/',
+            title: "兑换管理功能",
+          }]
+          }
       ]
       let menuData = menuDataMock;
-
+      console.log('menuData',menuData)
       // 格式化数据，设置 空children 为 null
       for (let i = 0; i < menuData.length; i++) {
         let t = menuData[i].children;

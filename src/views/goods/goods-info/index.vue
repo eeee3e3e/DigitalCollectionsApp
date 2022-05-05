@@ -18,7 +18,8 @@
        @edit="edit"
        @generate="generate"
        @save="save"
-       @shelves="shelves">
+       @shelves="shelves"
+       @interlinkage="interlinkage">
          <template slot="tableMenuLeft">
            <el-button type="primary" size="small" @click="addShop">添加商品</el-button>
          </template>
@@ -48,20 +49,28 @@
    </table-page>
       <edit-shop :showAddDialog="showAddDialog" @close="close" :title="title"  @closes="closes" :content="content"></edit-shop>
       <generate :showAddDialogs="showAddDialogs" @close="close" @closes="closes" :commodityID="commodityID"></generate>
+      <interlinkage :showAddDialogss="showAddDialogss"  @closeLInk="closeLInk" :params="params"></interlinkage>
    </div>
 </template>
 <script>
 import search from './search'
 import editShop from './editShop'
 import generate from './generate'
-import { GetCommodityListBack,CommodityOffLine,CommodityOnLine } from "@/api/goods.js";
+import interlinkage from './interlinkage'
+import { GetCommodityListBack,CommodityOffLine,CommodityOnLine,CommodityCreateUrl } from "@/api/goods.js";
+import { MessageBox } from 'element-ui'
 export default {
-  components:{search,editShop,generate},
+  components:{search,editShop,generate,interlinkage},
   data () {
     return {
+      params:{
+        CommodityID:'',
+        YouzanUrl:''
+      },
       commodityID:'',
       content:{},
       title:'',
+      showAddDialogss:false,
       showAddDialog:false,
       showAddDialogs:false,
       loading:false,
@@ -103,6 +112,12 @@ export default {
       this.showAddDialog = false
       this.showAddDialogs = false
     },
+    closeLInk () {
+      this.params.CommodityID = ''
+       this.params.YouzanUrl = ''
+      this.showAddDialogss = false
+       this.getList()
+    },
     // 获取数据
     getList () {
       this.loading = true
@@ -119,13 +134,20 @@ export default {
           actions: val.Status === 'online' ? [{label:'下架',handleClickName:'down'},
           {label:'编辑',handleClickName:'edit'},
           {label:'查看',handleClickName:'save'},
-          {label:'生成',handleClickName:'generate'},] :[{label:'上架',handleClickName:'shelves'},
+          {label:'生成',handleClickName:'generate'},
+          {label:'链接',handleClickName:'interlinkage'}] :[{label:'上架',handleClickName:'shelves'},
           {label:'编辑',handleClickName:'edit'},
           {label:'查看',handleClickName:'save'},
-          {label:'生成',handleClickName:'generate'},]
+          {label:'生成',handleClickName:'generate'},
+          {label:'链接',handleClickName:'interlinkage'}]
         }))
           this.loading = false
         })
+    },
+    interlinkage (row) {
+       this.params.CommodityID = row.ID
+       this.params.YouzanUrl = row.YouzanUrl ? row.YouzanUrl : ''
+       this.showAddDialogss = true
     },
     // 上架
     shelves (row) {

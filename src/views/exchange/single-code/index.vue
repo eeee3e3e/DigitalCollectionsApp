@@ -149,7 +149,7 @@ export default {
         {label:'兑换码',prop:'CommodityDetailsCode'},
         {label:'类别',prop:'Category',slot:true},
         {label:'创建时间',prop:'CreateTime'},
-        {label:'是否兑换',prop:'IsUsed',slot:true},
+        {label:'兑换状态',prop:'IsUsed',slot:true},
         {label:'操作',prop:'actions',fixed:'right',width:120},
       ]
     },

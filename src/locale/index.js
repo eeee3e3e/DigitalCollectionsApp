@@ -24,10 +24,17 @@ const messages = {
     'zh-CN': Object.assign(elementZhLocale, elementZhLocale),
     'en-US': Object.assign(elementEnLocale, elementEnLocale)
 };
+const prompt = {
+  'zh-CN': Object.assign(zhCnLocale, zhLocale),
+  'en-US': Object.assign(enUsLocale, enLocale),
+  'zh-CN': Object.assign(elementZhLocale, elementZhLocale),
+  'en-US': Object.assign(elementEnLocale, elementEnLocale)
+};
 const i18n = new VueI18n({
     locale: lang,
     messages,
-    silentFallbackWarn:true
+    prompt,
+    silentFallbackWarn:false
 });
 
 export default i18n;

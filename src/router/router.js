@@ -73,4 +73,5 @@ export const page500 = {
 };
 
 // 所有上面定义的路由都要写在下面的routers里
+console.log(otherRouter)
 export const routers = [loginRouter, otherRouter, page500, page403];
