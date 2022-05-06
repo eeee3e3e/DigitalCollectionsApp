@@ -125,7 +125,7 @@ export default {
   computed: {
     tableHeaders () {
       return [
-        {label:'商品ID',prop:'CommodityID'},
+        {label:'商品ID',prop:'ID'},
         {label:'商品名称',prop:'CommodityName'},
         {label:'商品编号',prop:'CommodityCode'},
         {label:'兑换码',prop:'CommodityDetailsCode'},

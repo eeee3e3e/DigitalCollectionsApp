@@ -31,11 +31,11 @@
          <template slot="tableMenuLeft">
          </template>
          <template slot="redectDDCID" slot-scope="scope">
-            <span v-if="scope.row.redectDDCID === 'null'"  type="success">否</span>
+            <span v-if="scope.row.redectDDCID === '' || scope.row.redectDDCID === null"  type="success">否</span>
             <span v-else >是</span>
          </template>
          <template slot="OwnerUserID" slot-scope="scope">
-            <span v-if="scope.row.OwnerUserID === 'null'"  type="success">否</span>
+            <span v-if="scope.row.OwnerUserID === '' || scope.row.OwnerUserID === null "  type="success">否</span>
             <span v-else >是</span>
          </template>
        </m-table>
@@ -129,6 +129,8 @@ export default {
           const cloneData = res.Data
           cloneData.map(c=>{
              this.$set(c,'redectDDCID',c.DDCID)
+             this.$set(c,'RealName',c.OwnerUserInfo.RealName)
+             this.$set(c,'MobileNo',c.OwnerUserInfo.MobileNo)
           })
           this.data = cloneData.map(val=>({
           ...val,
@@ -195,8 +197,8 @@ export default {
         {label:'兑换码',prop:'CommodityDetailsCode'},
         {label:'商品编号',prop:'CommodityNo'},
         {label:'是否兑换',prop:'OwnerUserID',slot:true},
-        {label:'兑换者名称',prop:'OwnerUserInfo.NickName'},
-        {label:'兑换者手机号',prop:'OwnerUserInfo.MobileNo'},
+        {label:'兑换者名称',prop:'RealName'},
+        {label:'兑换者手机号',prop:'MobileNo'},
         {label:'是否上链',prop:'redectDDCID',slot:true},
         {label:'哈希值',prop:'HashCode'},
         {label:'ddcid',prop:'DDCID'},
