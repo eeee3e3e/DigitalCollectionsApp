@@ -45,6 +45,10 @@
             <el-tag v-if="scope.row.SaleModeID === '1'"  type="success">预售</el-tag>
             <el-tag v-if="scope.row.SaleModeID === '2'" type="danger">盲盒</el-tag>
          </template>
+         <template slot="Sellout" slot-scope="scope">
+            <el-tag v-if="scope.row.Sellout === 'sellout'"  type="success">已售罄</el-tag>
+            <el-tag v-else></el-tag>
+         </template>
        </m-table>
      </template>
    </table-page>
@@ -261,6 +265,7 @@ export default {
         {label:'购买须知',prop:'PurchaseNote'},
         {label:'售卖方式',prop:'SaleModeID',slot:true},
         {label:'状态',prop:'Status',slot:true},
+        {label:'售罄状态',prop:'Sellout',slot:true},
         {label:'有赞链接',prop:'YouzanUrl'},
         {label:'发行方名称',prop:'ReleaseUserName'},
         {label:'创作方姓名',prop:'AuthorName'},
