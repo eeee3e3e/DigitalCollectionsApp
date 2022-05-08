@@ -19,7 +19,8 @@
        @generate="generate"
        @save="save"
        @shelves="shelves"
-       @interlinkage="interlinkage">
+       @interlinkage="interlinkage"
+       @clearChange="clearChange">
          <template slot="tableMenuLeft">
            <el-button type="primary" size="small" @click="addShop">添加商品</el-button>
          </template>
@@ -57,7 +58,7 @@ import search from './search'
 import editShop from './editShop'
 import generate from './generate'
 import interlinkage from './interlinkage'
-import { GetCommodityListBack,CommodityOffLine,CommodityOnLine,CommodityCreateUrl } from "@/api/goods.js";
+import { GetCommodityListBack,CommodityOffLine,CommodityOnLine,CommodityCreateUrl,SelloutCommodity } from "@/api/goods.js";
 import { MessageBox } from 'element-ui'
 export default {
   components:{search,editShop,generate,interlinkage},
@@ -94,6 +95,33 @@ export default {
     this.url = BASE.API_DEV.manager
   },
   methods: {
+    clearChange (row) {
+      this.$confirm('此操作将永久清仓, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          SelloutCommodity(row.ID).then(res=>{
+         if (res.ReturnCode === '200') {
+            this.$message({
+              message: '清仓成功',
+              type: 'success'
+        });
+         this.getList()
+        } else {
+          this.$message({
+              message: '清仓失败',
+              type: 'error'
+        });
+        }
+      })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消清仓'
+          });
+        });
+    },
      headError(e) {
         e.target.src = require("@/assets/404.png");
       },
@@ -135,11 +163,12 @@ export default {
           {label:'编辑',handleClickName:'edit'},
           {label:'查看',handleClickName:'save'},
           {label:'生成',handleClickName:'generate'},
-          {label:'链接',handleClickName:'interlinkage'}] :[{label:'上架',handleClickName:'shelves'},
+          {label:'链接',handleClickName:'interlinkage'},{label:'清仓',handleClickName:'clearChange'}] :[{label:'上架',handleClickName:'shelves'},
           {label:'编辑',handleClickName:'edit'},
           {label:'查看',handleClickName:'save'},
           {label:'生成',handleClickName:'generate'},
-          {label:'链接',handleClickName:'interlinkage'}]
+          {label:'链接',handleClickName:'interlinkage'},
+          {label:'清仓',handleClickName:'clearChange'}]
         }))
           this.loading = false
         })
@@ -238,7 +267,7 @@ export default {
         {label:'品牌方名称',prop:'BrandName'},
         {label:'系列',prop:'SerialType'},
         {label:'商品图片',prop:'AttachmentList',slot:true},
-        {label:'操作',prop:'actions',fixed:'right',width:220},
+        {label:'操作',prop:'actions',fixed:'right',width:250},
       ]
     },
     // tableRowKeys () {

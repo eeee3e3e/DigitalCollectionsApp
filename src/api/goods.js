@@ -17,6 +17,10 @@ export const CreateCommodityDetailsSingle = (params) => {
 export const GetCommodityTypeListAll = (params) => {
   return getRequest('/api/Dictionary/GetCommodityTypeListAll', params)
 }
+// 清仓
+export const SelloutCommodity = (params) => {
+  return postRequest(`/api/Commodity/SelloutCommodity?id=${params}`)
+}
 // 城市数藏 绑定有赞链接
 export const CommodityCreateUrl = (params) => {
   return postRequest('/api/Commodity/CommodityCreateUrl', params)
