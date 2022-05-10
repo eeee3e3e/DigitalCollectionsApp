@@ -27,7 +27,8 @@
        :pageParams="pageParams"
        :pagination="pagination"
        :refreshDom="refreshDom"
-       @manual="manual">
+       @manual="manual"
+       @pageChange="pageChange">
          <template slot="tableMenuLeft">
          </template>
          <template slot="redectDDCID" slot-scope="scope">
@@ -85,6 +86,11 @@ export default {
     this.getNavList() // 获取导航栏
   },
   methods:{
+    pageChange (v) {
+      this.pageParams.pageIndex = v.pageIndex
+      this.pageParams.pageSize = v.pageSize
+      this.getList()
+    },
     sizeChange (e) {
       this.pageParamsNav.pageSize =e
       this.getList()
@@ -98,6 +104,8 @@ export default {
     addactive (item) {
       this.current = item.ID
       this.query.commodityId = item.ID
+      this.pageParams.pageIndex = 1
+      this.pageParams.pageSize = 10
       this.getList()
     },
      // 获取NAV
@@ -223,5 +231,8 @@ export default {
       line-height: 36px;
       text-align:left;
     }
+  }
+  /deep/ .el-card__body, .el-main{
+    padding:0;
   }
 </style>
