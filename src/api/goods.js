@@ -39,11 +39,11 @@ export const GetCommodityListBack = (queryParams) => {
 };
 // 城市数藏一码一兑的兑换码列表
 export const GetCommodityDetailsByTypeSingle = (queryParams) => {
-  return getRequest(`/api/CommodityDetails/GetCommodityDetailsByTypeSingle?comodityCode=${queryParams.comodityCode}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+  return getRequest(`/api/CommodityDetails/GetCommodityDetailsByTypeSingle?name=${queryParams.name}&comodityCode=${queryParams.comodityCode}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
 };
 // 城市数藏一码多兑的兑换码列表
 export const GetCommodityDetailsByTypeSingleD = (queryParams) => {
-  return getRequest(`/api/CommodityDetails/GetCommodityDetailsByTypeMultiple?comodityCode=${queryParams.comodityCode}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}&starTime=${queryParams.starTime}&endTime=${queryParams.endTime}`);
+  return getRequest(`/api/CommodityDetails/GetCommodityDetailsByTypeMultiple?name=${queryParams.name}&comodityCode=${queryParams.comodityCode}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}&starTime=${queryParams.starTime}&endTime=${queryParams.endTime}`);
 };
 // 城市数藏 删除商品明细（验证码删除）
 export const DeleteCommodityDetails = (ids) =>{

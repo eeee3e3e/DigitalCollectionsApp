@@ -54,6 +54,9 @@
   <el-form-item label="售卖结束时间" prop="EndDateTime">
      <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="testend" :value="ruleForm.EndDateTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
   </el-form-item>
+   <el-form-item label="冷却周期(小时)" prop="CirculationCoolingPeriod">
+    <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.CirculationCoolingPeriod"></el-input>
+  </el-form-item>
   <el-form-item label="封面" prop="FrontImage">
     <el-upload
      :disabled="this.title === '查看商品详情'"
@@ -208,7 +211,8 @@ export default {
           BrandName:'',
           SerialType:'',
           StartDateTime:'',
-          EndDateTime:''
+          EndDateTime:'',
+          CirculationCoolingPeriod:undefined
 
         },
         rules: {
@@ -229,6 +233,9 @@ export default {
           ],
           Price: [
             { required: true, message: '请输入商品价格', trigger: 'blur' }
+          ],
+          CirculationCoolingPeriod: [
+            { required: true, message: '请输入冷却周期，单位小时', trigger: 'blur' }
           ],
           Description: [
             { required: true, message: '请输入描述信息', trigger: 'blur' }

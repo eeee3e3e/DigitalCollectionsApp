@@ -62,6 +62,7 @@ export default {
     getList () {
       const queryParams = {
           comodityCode:this.queryParams.comodityCode || '',
+          name:this.queryParams.name || '',
           ...this.pageParams
         }
       this.loading = true
@@ -127,6 +128,7 @@ export default {
       return [
         {label:'商品ID',prop:'CommodityID'},
         {label:'商品名称',prop:'CommodityName'},
+        {label:'商品序号',prop:'CommodityNo'},
         {label:'商品编号',prop:'CommodityCode'},
         {label:'兑换码',prop:'CommodityDetailsCode'},
         {label:'类别',prop:'Category',slot:true},

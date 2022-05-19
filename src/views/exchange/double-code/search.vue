@@ -1,5 +1,8 @@
 <template>
   <el-form class="search-form" :inline="true">
+    <el-form-item label="商品名称" label-width="180px">
+      <el-input style="width:220px" size="small" v-model="queryParams.name"  placeholder="请输入商品名称"></el-input>
+    </el-form-item>
     <el-form-item label="生成码编号" label-width="180px">
       <el-input style="width:220px" size="small" v-model="queryParams.comodityCode"  placeholder="请输入编号"></el-input>
     </el-form-item>
@@ -15,7 +18,8 @@ export default {
   data () {
     return {
       queryParams:{
-         comodityCode:''
+         comodityCode:'',
+         name:''
       }
     }
   },
