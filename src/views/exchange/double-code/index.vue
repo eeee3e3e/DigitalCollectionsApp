@@ -109,6 +109,7 @@ export default {
     // 搜索按钮操作
     handleQuery (params) {
       this.queryParams = {...params}
+      this.getList()
     },
     //  重置按钮操作
     resetQuery (params) {
