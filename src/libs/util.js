@@ -216,7 +216,35 @@ util.initRouter = function(vm) {
             path: '/',
             title: "兑换管理功能",
           }]
-          }
+          },
+          {
+            frontRoute: "null",
+            level: 0,
+            id: "1367039950367700777",
+            name: "examples-details",
+            parentId: "1",
+            path: "null",
+            title: "转赠",
+            children:[{
+              children: [{
+                children: [],
+                frontRoute: "examples-details/index",
+                id: "1367045529331161952",
+                name: "examples-details",
+                level: 2,
+                parentId: "13670455297211619662",
+                path: 'examples-details',
+                title: "转赠列表",
+              }],
+              frontRoute: 'Main',
+              id: "13670455297211619662",
+              name: "examples-details",
+              level: 1,
+              parentId: "1367039950367700777",
+              path: '/',
+              title: "商品流转记录",
+            }]
+            }
       ]
       let menuData = menuDataMock;
       console.log('menuData',menuData)

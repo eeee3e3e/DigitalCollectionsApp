@@ -22,7 +22,7 @@
               <el-input v-model="ruleForm.CommodityID"></el-input>
             </el-form-item> -->
             <div style="width:100%;text-align:right;margin-top:35px">
-              <el-button v-if="radio=== '2'"  type="primary" @click="submitForm('ruleForm')">提交</el-button>
+              <el-button v-if="radio=== '2'"  :disabled="updateStatus" type="primary" @click="submitForm('ruleForm')">提交</el-button>
               <el-button type="primary" @click="handleClose">关闭</el-button>
             </div>
   </el-form-item>
@@ -45,6 +45,7 @@ export default {
   },
   data () {
     return {
+      updateStatus:false,
       fileList:[],
       radio:'1',
       dialogVisible:false,
@@ -84,10 +85,12 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
         if (this.radio === '2') {
+          this.updateStatus = true
           CreateCommodityDetailsSingle({commodityID:this.commodityID}).then(res=>{
             if (res.ReturnCode === '200') {
                this.ruleForm.CommodityID = ''
                 this.dialogVisible = false
+                this.updateStatus = false
                 const file = `${BASE.API_DEV.manager}${res.Data}`
                this.download('一码一兑',file)
                 this.$emit('closes')
@@ -101,6 +104,8 @@ export default {
                 this.dialogVisible = false
               this.$emit('closes')
             }
+          }).finally(() => {
+             this.updateStatus = true
           })
         }
           } else {

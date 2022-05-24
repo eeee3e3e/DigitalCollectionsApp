@@ -104,6 +104,31 @@
         <img width="100%" :src="dialogImageUrls" alt="">
       </el-dialog>
   </el-form-item>
+
+    <!-- <el-form-item label="发行方图片" prop="fhfList">
+          <el-upload
+           :disabled="this.title === '查看商品详情'"
+            ref="uploadfhf"
+            action=""
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreviewfhf"
+            :on-remove="handleRemovefhf"
+            :on-change="UploadImagefhf"
+            :file-list="fhfList"
+            :auto-upload="false"
+             :limit="1"
+        >
+          <i class="el-icon-plus"></i>
+          <template #tip>
+            <div style="font-size: 12px;color: #919191;">
+             单次限制上传一张图片且封面只能上传一张
+            </div>
+          </template>
+        </el-upload>
+      <el-dialog :visible.sync="dialogVsfhf" append-to-body>
+        <img width="100%" :src="dialogImageUrlsfhf" alt="">
+      </el-dialog>
+  </el-form-item> -->
   <el-form-item label="描述信息" prop="Description">
   <div class="quill-editor">
     <!-- 图片上传组件辅助，组件内添加v-show=“false”属性，把该组件隐藏起来。-->
@@ -185,6 +210,7 @@ export default {
       optionsCommodityTypeID:[],
       optionsSaleModeID:[],
       AttachmentList:[],
+      fhfList:[],
           FrontImage:[{url:''}],
       fileLists:[],
       disabled:false,
@@ -192,6 +218,8 @@ export default {
       dialogImageUrl:'',
       dialogVs:false,
       dialogImageUrls:'',
+      dialogImageUrlsfhf:'',
+      dialogVsfhf:false,
       dialogVisible: false,
       ruleForm: {
           ID:'',
@@ -205,6 +233,7 @@ export default {
           Price: '',
           Description: '',
           AttachmentList: [],
+          fhfList:[],
           PurchaseNote: '',
           ReleaseUserName: '',
           AuthorName:'',
@@ -323,6 +352,27 @@ export default {
       })
 
     },
+    // 发行方预览图片功能
+    handlePictureCardPreviewfhf(file) {
+      this.dialogVsfhf = true
+      this.dialogImageUrlsfhf = file.url
+
+    },
+      //发行方移除图片功能
+    handleRemovefhf(file, fileList) {
+      this.fhfList= []
+      this.ruleForm.fhfList = ''
+    },
+    UploadImagefhf(file,filelist) {
+      let fd = new FormData()
+      fd.append('files', file.raw)
+      uploadCity(file.name,fd).then(res=>{
+
+        this.ruleForm.fhfList.push(res.Data)
+
+      })
+
+    },
     // 富文本上传图片
     editor_change (file) {
         let fd = new FormData()
@@ -397,6 +447,7 @@ export default {
         // this.$refs['ruleForm'].resetFields()
          this.FrontImage = []
           this.AttachmentList = []
+          this.fhfList= []
           for (let i in  this.ruleForm) {
             if (i !== 'AttachmentList') {
               this.ruleForm[i] = ''
@@ -419,6 +470,12 @@ export default {
           } else {
             this.FrontImage = []
           }
+          if (this.content.FrontImage !=='') {
+            this.fhfList = [{url:''}]
+             this.fhfList[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
+          } else {
+            this.fhfList = []
+          }
           if (this.content.Description !=='') {
             console.log('this.content.Description',this.content.Description)
             //  this.ruleForm.Description = `${BASE.API_DEV.manager}${this.content.Description}`
@@ -435,6 +492,7 @@ export default {
 
           this.FrontImage = []
           this.AttachmentList = []
+          this.fhfList = []
           for (let i in  this.ruleForm) {
             if (i !== 'AttachmentList') {
               this.ruleForm[i] = ''
