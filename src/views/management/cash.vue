@@ -210,7 +210,7 @@ export default {
         {label:'是否上链',prop:'redectDDCID',slot:true},
         {label:'哈希值',prop:'HashCode'},
         {label:'ddcid',prop:'DDCID'},
-        {label:'兑换人的钱包地址',prop:'',width:180},  // 待字段
+        {label:'兑换人的钱包地址',prop:'OpbChainClientAddress',width:240},  // 待字段
         {label:'操作',prop:'actions',fixed:'right',width:220},
       ]
     },

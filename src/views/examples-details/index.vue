@@ -13,12 +13,16 @@
        :refreshDom="refreshDom"
        @handleCleanhand="handleCleanhand"
        @pageChange="pageChange">
+        <template slot="Status" slot-scope="scope">
+           <div v-if="scope.row.Status === 'chained'">已经上链</div>
+           <div v-if="scope.row.Status === 'chaining'">上链中</div>
+         </template>
        </m-table>
      </template>
    </table-page>
 </template>
 <script>
-import { GetCommodityDetailsByTypeSingle,DeleteCommodityDetails } from "@/api/goods.js";
+import { GetTurnCommodityLogBack,CommodityCirculationDDC } from "@/api/goods.js";
 import search from './search'
 export default {
   components:{search},
@@ -44,8 +48,31 @@ export default {
   },
   methods: {
     // 手工转赠上链
-    handleCleanhand () {
-
+    handleCleanhand (row) {
+      this.$confirm('此操作将手工转赠上链成功, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          CommodityCirculationDDC(row.ID).then(res=>{
+            if (res.ReturnCode === '200') {
+              this.$message({
+            type: 'success',
+            message: '手工转赠上链成功!'
+          });
+            } else {
+              this.$message({
+            type: 'error',
+            message: res.ReturnMessage
+          });
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消上链'
+          });
+        })
     },
     pageChange (v) {
       this.pageParams.pageIndex = v.pageIndex
@@ -55,22 +82,22 @@ export default {
     // 获取数据
     getList () {
       const queryParams = {
-          // comodityCode:this.queryParams.comodityCode || '',
-          // name:this.queryParams.name || '',
-          // ...this.pageParams
+          mobileNo:this.queryParams.mobileNo || '',
+          userName:this.queryParams.userName || '',
+          commodityName:this.queryParams.commodityName || '',
+          isChained:this.queryParams.isChained || '',
+          ...this.pageParams
         }
       this.loading = true
-    //   GetCommodityDetailsByTypeSingle(queryParams).then(res=>{
-    //     const {Data,TotalCount} =res
-    //     this.data = Data.map(val=>({
-    //       ...val,
-    //       actions:[{label:'手工转赠上链',handleClickName:'handleCleanhand'}]
-    //     })).filter((item)=>{
-    //       return  item.Category === 'single'
-    //     })
-    //     this.pagination.TotalCount =TotalCount
+      GetTurnCommodityLogBack(queryParams).then(res=>{
+        const {Data,TotalCount} =res
+        this.data = Data.map(val=>({
+          ...val,
+          actions:[{label:'手工转赠上链',handleClickName:'handleCleanhand'}]
+        }))
+        this.pagination.TotalCount =TotalCount
         this.loading = false
-    // })
+    })
     },
     // 搜索按钮操作
     handleQuery (params) {
@@ -93,18 +120,17 @@ export default {
   computed: {
     tableHeaders () {
       return [
-        {label:'商品ID',prop:'a'},
-        {label:'商品编号',prop:'x'},
-        {label:'商品名称',prop:'c'},
-        {label:'转赠人姓名',prop:'v'},
-        {label:'转赠人手机号',prop:'b'},
-        {label:'转赠人的钱包地址',prop:'n'},
-        {label:'被转增人姓名',prop:'m'},
-        {label:'被转赠人手机号',prop:'s'},
-        {label:'被转赠人的钱包地址',prop:'d'},
-        {label:'转赠时间',prop:'f'},
-        {label:'转赠上链时间',prop:'g'},
-        {label:'是否上链',prop:'h'},
+        {label:'商品ID',prop:'CommodityID'},
+        {label:'商品编号',prop:'CommodityNo'},
+        {label:'商品名称',prop:'CommodityName'},
+        {label:'转赠人姓名',prop:'OutUserInfoRealName'},
+        {label:'转赠人手机号',prop:'OutUserInfoMobileNo'},
+        {label:'转赠人的钱包地址',prop:'OutUserInfoOpbChainClientAddress',width:140},
+        {label:'被转增人姓名',prop:'InUserInfoRealName'},
+        {label:'被转赠人手机号',prop:'InUserInfoMobileNo'},
+        {label:'被转赠人的钱包地址',prop:'InUserInfoOpbChainClientAddress',width:155},
+        {label:'转赠时间',prop:'CirculationDateTime'},
+        {label:'是否上链',prop:'Status',slot:true},
         {label:'操作',prop:'actions',fixed:'right',width:150}
       ]
     },

@@ -1,10 +1,23 @@
 <template>
   <el-form class="search-form" :inline="true">
-     <el-form-item label="商品名称" label-width="180px">
-      <el-input style="width:220px" size="small" v-model="queryParams.name" placeholder="请输入名称"></el-input>
+     <el-form-item label="手机号码（转赠人，被转赠人）" label-width="220px">
+      <el-input style="width:220px" size="small" v-model="queryParams.mobileNo" placeholder="请输入手机号码"></el-input>
     </el-form-item>
-    <el-form-item label="商品编号" label-width="180px">
-      <el-input style="width:220px" size="small" v-model="queryParams.comodityCode" placeholder="请输入编号"></el-input>
+    <el-form-item label="真实姓名（转赠人，被转赠人）" label-width="220px">
+      <el-input style="width:220px" size="small" v-model="queryParams.userName" placeholder="请输入真实姓名"></el-input>
+    </el-form-item>
+     <el-form-item label="商品名称" label-width="220px">
+      <el-input style="width:220px" size="small" v-model="queryParams.commodityName" placeholder="请输入商品名称"></el-input>
+    </el-form-item>
+    <el-form-item label="是否上链" label-width="220px">
+     <el-select v-model="queryParams.isChained" placeholder="请选择" size="small">
+       <el-option
+      v-for="item in sl"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+     </el-select>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" size="small" icon="el-icon-search" @click="handleQuery">查询</el-button>
@@ -17,9 +30,20 @@ export default {
   name:'search',
   data () {
     return {
+      sl:[
+         {
+          value: 'true',
+          label: '是'
+        }, {
+          value: 'false',
+          label: '否'
+        }
+      ],
       queryParams:{
-        comodityCode:'',
-        name:''
+        mobileNo:'',
+        userName:'',
+        commodityName:'',
+        isChained:''
       }
     }
   },

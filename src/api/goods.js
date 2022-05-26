@@ -49,6 +49,14 @@ export const GetCommodityDetailsByTypeSingleD = (queryParams) => {
 export const DeleteCommodityDetails = (ids) =>{
   return deleteRequest(`/api/CommodityDetails/DeleteCommodityDetails?id=${ids}`)
 }
+// 城市数藏 转赠列表
+export const GetTurnCommodityLogBack = (queryParams) => {
+  return getRequest(`/api/TurnCommodity/GetTurnCommodityLogBack?mobileNo=${queryParams.mobileNo}&userName=${queryParams.userName}&commodityName=${queryParams.commodityName}&isChained=${queryParams.isChained}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+};
+// 转赠手动上链
+export const CommodityCirculationDDC = (params) => {
+  return postRequest(`/api/TurnCommodity/CommodityCirculationDDC?ID==${params}`)
+}
 // 商品下架
 export const ManualChain = (params) => {
   return postRequest(`/api/UserCommodityExchanges/ManualChain/?commodityDetailsId=${params}`)
