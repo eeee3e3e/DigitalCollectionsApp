@@ -13,7 +13,7 @@ export const managerUrl =
     : BASE.API_PROD.manager);
 
 const service = axios.create({
-  timeout: 3000,
+  timeout: 100000,
   baseURL: managerUrl
 });
 var isRefreshToken = 0;

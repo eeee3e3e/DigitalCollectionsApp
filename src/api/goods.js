@@ -55,7 +55,7 @@ export const GetTurnCommodityLogBack = (queryParams) => {
 };
 // 转赠手动上链
 export const CommodityCirculationDDC = (params) => {
-  return postRequest(`/api/TurnCommodity/CommodityCirculationDDC?ID==${params}`)
+  return postRequest(`/api/TurnCommodity/CommodityCirculationDDC?ID=${params}`)
 }
 // 商品下架
 export const ManualChain = (params) => {

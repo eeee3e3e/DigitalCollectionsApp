@@ -130,6 +130,7 @@ export default {
         {label:'被转赠人手机号',prop:'InUserInfoMobileNo'},
         {label:'被转赠人的钱包地址',prop:'InUserInfoOpbChainClientAddress',width:155},
         {label:'转赠时间',prop:'CirculationDateTime'},
+        {label:'转赠上链时间',prop:'InDDCIDDateTime'},
         {label:'是否上链',prop:'Status',slot:true},
         {label:'操作',prop:'actions',fixed:'right',width:150}
       ]
