@@ -244,7 +244,35 @@ util.initRouter = function(vm) {
               path: '/',
               title: "商品流转记录",
             }]
-            }
+            },
+            {
+              frontRoute: "null",
+              level: 0,
+              id: "1367039950367700766",
+              name: "user-management",
+              parentId: "1",
+              path: "null",
+              title: "用户",
+              children:[{
+                children: [{
+                  children: [],
+                  frontRoute: "user-management/index",
+                  id: "1367045529331161112",
+                  name: "user-management",
+                  level: 2,
+                  parentId: "13670455297211619112",
+                  path: 'user-management',
+                  title: "用户列表",
+                }],
+                frontRoute: 'Main',
+                id: "13670455297211619112",
+                name: "user-management",
+                level: 1,
+                parentId: "1367039950367700766",
+                path: '/',
+                title: "用户管理改造",
+              }]
+              }
       ]
       let menuData = menuDataMock;
       console.log('menuData',menuData)

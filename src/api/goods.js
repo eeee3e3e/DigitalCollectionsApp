@@ -53,6 +53,10 @@ export const DeleteCommodityDetails = (ids) =>{
 export const GetTurnCommodityLogBack = (queryParams) => {
   return getRequest(`/api/TurnCommodity/GetTurnCommodityLogBack?mobileNo=${queryParams.mobileNo}&userName=${queryParams.userName}&commodityName=${queryParams.commodityName}&isChained=${queryParams.isChained}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
 };
+// 城市数藏 用户管理
+export const GetUserList = (queryParams) => {
+  return getRequest(`/api/UserInfo/GetUserList?mobileNo=${queryParams.mobileNo}&realName=${queryParams.realName}&nickName=${queryParams.nickName}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+};
 // 转赠手动上链
 export const CommodityCirculationDDC = (params) => {
   return postRequest(`/api/TurnCommodity/CommodityCirculationDDC?ID=${params}`)
