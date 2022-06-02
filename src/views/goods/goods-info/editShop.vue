@@ -81,7 +81,8 @@
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
   </el-form-item>
-   <el-form-item label="商品图片" prop="AttachmentList">
+  <div style="color:red;padding-bottom:10px;">*注(单个藏品中的【商品图片、 商品视频】只允许二选一,否则将出错 )</div>
+   <el-form-item label="商品图片" prop="">
           <el-upload
            :disabled="this.title === '查看商品详情'"
             ref="upload"
@@ -92,11 +93,12 @@
             :on-change="UploadImage"
             :file-list="AttachmentList"
             :auto-upload="false"
+            :limit="1"
         >
           <i class="el-icon-plus"></i>
           <template #tip>
             <div style="font-size: 12px;color: #919191;">
-              单次限制上传一张图片
+              单次限制上传一张图片且封面只能上传一张
             </div>
           </template>
         </el-upload>
@@ -104,7 +106,39 @@
         <img width="100%" :src="dialogImageUrls" alt="">
       </el-dialog>
   </el-form-item>
-
+  <el-form-item label="商品视频" prop="">
+          <el-upload
+           class="avatar-uploader"
+           :disabled="this.title === '查看商品详情'"
+            action=""
+            :on-progress="uploadVideoProcess"
+            :before-upload="beforeUploadVideo"
+            :on-change="handleVideoSuccess"
+            :show-file-list="false"
+            :limit="1"
+        >
+          <video
+     v-if="videoForm.showVideoPath != '' && !videoFlag"
+     :src="videoForm.showVideoPath"
+     class="avatar video-avatar"
+     loop="loop"
+     autoplay="autoplay" muted>
+     您的浏览器不支持视频播放
+      </video>
+     <i v-else-if="videoForm.showVideoPath == '' && !videoFlag"
+     class="el-icon-plus avatar-uploader-icon"
+     ></i>
+     <el-progress v-if="videoFlag == true" type="circle"
+     v-bind:percentage="videoUploadPercent"
+     style="margin-top: 7px"></el-progress>
+        </el-upload>
+        <el-button v-if="this.title !== '查看商品详情'" @click="handleVideo">删除商品视频</el-button>
+           <div>
+            <div style="font-size: 12px;color: #919191;">
+              单次限制上传一个视频且只能上传一个（低于50MB）
+            </div>
+          </div>
+  </el-form-item>
     <!-- <el-form-item label="发行方图片" prop="fhfList">
           <el-upload
            :disabled="this.title === '查看商品详情'"
@@ -135,7 +169,7 @@
     <el-upload v-show="false" class="avatar-uploader" action name="img" :show-file-list="false" :before-upload="editor_change">
     </el-upload>
     <!--富文本编辑器组件-->
-    <quill-editor v-model="ruleForm.Description"   :options="editorOption"  ref="QuillEditor"></quill-editor>
+    <quill-editor v-model="ruleForm.Description" :disabled="this.title === '查看商品详情'"   :options="editorOption"  ref="QuillEditor"></quill-editor>
   </div>
   </el-form-item>
   <el-form-item style="text-align:center;">
@@ -177,6 +211,15 @@ export default {
   },
   data () {
     return {
+       videoFlag: false,
+      //是否显示进度条
+      videoUploadPercent: "",
+      //进度条的进度，
+      isShowUploadVideo: false,
+      //显示上传按钮
+      videoForm: {
+        showVideoPath: "",  //回显的变量
+      },
       url:'',
       Linkurl:'',
       editorOption:{
@@ -310,6 +353,36 @@ export default {
 	        },
 	    },
   methods:{
+    beforeUploadVideo(file) {
+      console.log(file)
+      var fileSize = file.size / 1024 / 1024 < 50;   //控制大小  修改50的值即可
+      if (!fileSize) {
+        this.$message.error("视频大小不能超过50MB");
+        return false;
+      } else {
+        let fd = new FormData()
+      fd.append('files', file)
+      uploadCity(file.name,fd).then(res=>{
+        console.log(res)
+        this.ruleForm.AttachmentList.push(res.Data)
+        this.videoForm.showVideoPath = `${BASE.API_DEV.manager}${res.Data}`
+      })
+      }
+      this.isShowUploadVideo = false;
+    },
+    //进度条
+    uploadVideoProcess(event, file, fileList) {    //注意在data中添加对应的变量名
+      this.videoFlag = true;
+      this.videoUploadPercent = file.percentage.toFixed(0) * 1;
+    },
+    //上传成功回调
+    handleVideoSuccess(file, fileList) {
+      console.log('上传成功回调',file,fileList)
+      this.isShowUploadVideo = true;
+      this.videoFlag = false;
+      this.videoUploadPercent = 0;
+
+    },
     GetSaleModeList () {
       GetSaleModeList().then(res=>{
         this.optionsSaleModeID = res.Data
@@ -335,6 +408,10 @@ export default {
           this.ruleForm.AttachmentList.splice(i,1)
         }
       })
+    },
+    handleVideo () {
+          this.ruleForm.AttachmentList = []
+          this.videoForm.showVideoPath = ''
     },
     //预览图片功能
     handlePictureCardPreview(file) {
@@ -482,10 +559,16 @@ export default {
           } else {
             this.FrontImage = []
           }
-         const AttachmentList_conversion = this.ruleForm.AttachmentList.map(item=>{
+          this.ruleForm.AttachmentList.map(item=>{
            let urlImage = {url:`${BASE.API_DEV.manager}${item}`}
-           this.AttachmentList.push(urlImage)
+           if (item.split('.')[item.split('.').length-1] === 'mp4') {
+              this.videoForm.showVideoPath = `${BASE.API_DEV.manager}${item}`
+           } else {
+              this.AttachmentList.push(urlImage)
+           }
+
          })
+
           // console
           this.dialogVisible = true
         } else {
@@ -493,6 +576,7 @@ export default {
           this.FrontImage = []
           this.AttachmentList = []
           this.fhfList = []
+          this.videoForm.showVideoPath = ''
           for (let i in  this.ruleForm) {
             if (i !== 'AttachmentList') {
               this.ruleForm[i] = ''
@@ -508,6 +592,32 @@ export default {
 }
 </script>
 <style lang="scss">
+.avatar-uploader-icon {
+  border: 1px dashed #d9d9d9 !important;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9 !important;
+  border-radius: 6px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.avatar-uploader .el-upload:hover {
+  border: 1px dashed #d9d9d9 !important;
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 300px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 300px;
+  height: 178px;
+  display: block;
+}
   .el-button--primary{
     background: red;
     border-color: red;

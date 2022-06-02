@@ -72,7 +72,7 @@ export const login = (params) => {
 };
 // 城市数藏附件上传
 export const uploadCity = (name,params) => {
-  return postUploadRequest(`/api/UploadFile/UploadFileBack?path=/image/${name}`,params);
+  return postUploadRequest(`/api/UploadFile/UploadFileBack?path=/${name}`,params);
 };
 // 登出
 export const logout = () => {
