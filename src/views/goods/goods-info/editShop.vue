@@ -48,6 +48,14 @@
   <el-form-item label="商品库存" v-if="this.title === '查看商品详情'">
     <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.StockNum"></el-input>
   </el-form-item>
+
+  <el-form-item label="报名开始时间" prop="SignUpStartTime">
+    <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="signUpStart" :value="ruleForm.SignUpStartTime"  placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+  </el-form-item>
+  <el-form-item label="报名结束时间" prop="SignUpEndTime">
+     <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="signUpEnd" :value="ruleForm.SignUpEndTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+  </el-form-item>
+
   <el-form-item label="售卖开始时间" prop="StartDateTime">
     <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="teststart" :value="ruleForm.StartDateTime"  placeholder="选择日期和时间" style="width: 200px"></Date-picker>
   </el-form-item>
@@ -283,8 +291,10 @@ export default {
           SerialType:'',
           StartDateTime:'',
           EndDateTime:'',
-          CirculationCoolingPeriod:undefined
+          CirculationCoolingPeriod:undefined,
 
+          SignUpStartTime: '',
+          SignUpEndTime: ''
         },
         rules: {
            SaleModeID: [
@@ -390,6 +400,12 @@ export default {
       GetCommodityTypeListAll().then(res=>{
         this.optionsCommodityTypeID = res.Data
       })
+    },
+    signUpStart(v) {
+      this.ruleForm.SignUpStartTime = v
+    },
+    signUpEnd(v) {
+      this.ruleForm.SignUpEndTime = v
     },
     teststart (v) {
       this.ruleForm.StartDateTime = v
