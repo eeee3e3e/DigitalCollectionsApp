@@ -376,7 +376,6 @@ export default {
     },
     //上传成功回调
     handleVideoSuccess(file, fileList) {
-      console.log('上传成功回调',file,fileList)
       this.isShowUploadVideo = true;
       this.videoFlag = false;
       this.videoUploadPercent = 0;
@@ -422,7 +421,6 @@ export default {
       let fd = new FormData()
       fd.append('files', file.raw)
       uploadCity(file.name,fd).then(res=>{
-        console.log(res)
         this.ruleForm.AttachmentList.push(res.Data)
 
       })
@@ -451,7 +449,6 @@ export default {
     },
     // 富文本上传图片
     editor_change (file) {
-      debugger
         let fd = new FormData()
       fd.append('files', file)
       uploadCity(file.name,fd).then(res=>{
