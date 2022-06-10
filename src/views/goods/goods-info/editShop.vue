@@ -344,7 +344,7 @@ export default {
   mounted () {
     this.GetSaleModeList()
     this.GetCommodityTypeListAll()
-    this.Linkurl = BASE.API_DEV.manager
+    this.Linkurl = BASE.API_DEV.managerImage
   },
   computed: {
 	       editor() {
@@ -364,7 +364,7 @@ export default {
       uploadCity(file.name,fd).then(res=>{
         console.log(res)
         this.ruleForm.AttachmentList.push(res.Data)
-        this.videoForm.showVideoPath = `${BASE.API_DEV.manager}${res.Data}`
+        this.videoForm.showVideoPath = `${BASE.API_DEV.managerImage}${res.Data}`
       })
       }
       this.isShowUploadVideo = false;
@@ -539,13 +539,13 @@ export default {
           this.AttachmentList = []
           if (this.content.FrontImage !=='') {
             this.FrontImage = [{url:''}]
-             this.FrontImage[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
+             this.FrontImage[0].url = `${BASE.API_DEV.managerImage}${this.content.FrontImage}`
           } else {
             this.FrontImage = []
           }
           if (this.content.FrontImage !=='') {
             this.fhfList = [{url:''}]
-             this.fhfList[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
+             this.fhfList[0].url = `${BASE.API_DEV.managerImage}${this.content.FrontImage}`
           } else {
             this.fhfList = []
           }
@@ -556,9 +556,9 @@ export default {
             this.FrontImage = []
           }
           this.ruleForm.AttachmentList.map(item=>{
-           let urlImage = {url:`${BASE.API_DEV.manager}${item}`}
+           let urlImage = {url:`${BASE.API_DEV.managerImage}${item}`}
            if (item.split('.')[item.split('.').length-1] === 'mp4') {
-              this.videoForm.showVideoPath = `${BASE.API_DEV.manager}${item}`
+              this.videoForm.showVideoPath = `${BASE.API_DEV.managerImage}${item}`
            } else {
               this.AttachmentList.push(urlImage)
            }

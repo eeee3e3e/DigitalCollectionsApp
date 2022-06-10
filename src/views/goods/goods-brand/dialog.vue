@@ -166,7 +166,7 @@ export default {
           this.ImgUrl = []
           if (this.content.ImgUrl !== '') {
             this.ImgUrl = [{url:''}]
-             this.ImgUrl[0].url = `${BASE.API_DEV.manager}${this.content.ImgUrl}`
+             this.ImgUrl[0].url = `${BASE.API_DEV.managerImage}${this.content.ImgUrl}`
           } else {
             this.ImgUrl = []
           }
