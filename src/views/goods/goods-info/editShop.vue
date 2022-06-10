@@ -108,7 +108,6 @@
   </el-form-item>
   <el-form-item label="商品视频" prop="">
           <el-upload
-           class="avatar-uploader"
            :disabled="this.title === '查看商品详情'"
             action=""
             :on-progress="uploadVideoProcess"
@@ -166,7 +165,7 @@
   <el-form-item label="描述信息" prop="Description">
   <div class="quill-editor">
     <!-- 图片上传组件辅助，组件内添加v-show=“false”属性，把该组件隐藏起来。-->
-    <el-upload v-show="false" class="avatar-uploader" action name="img" :show-file-list="false" :before-upload="editor_change">
+    <el-upload v-show="false" class="avatar-uploaders" action name="img" :show-file-list="false" :before-upload="editor_change">
     </el-upload>
     <!--富文本编辑器组件-->
     <quill-editor v-model="ruleForm.Description" :disabled="this.title === '查看商品详情'"   :options="editorOption"  ref="QuillEditor"></quill-editor>
@@ -241,7 +240,7 @@ export default {
                 if (value) {
                   console.log('value',value)
                   // 调用element的图片上传组件
-                  document.querySelector('.avatar-uploader input').click()
+                  document.querySelector('.avatar-uploaders input').click()
                 } else {
                   this.quill.format('image', false)
                 }
@@ -423,7 +422,7 @@ export default {
       let fd = new FormData()
       fd.append('files', file.raw)
       uploadCity(file.name,fd).then(res=>{
-
+        console.log(res)
         this.ruleForm.AttachmentList.push(res.Data)
 
       })
@@ -452,6 +451,7 @@ export default {
     },
     // 富文本上传图片
     editor_change (file) {
+      debugger
         let fd = new FormData()
       fd.append('files', file)
       uploadCity(file.name,fd).then(res=>{
@@ -461,7 +461,6 @@ export default {
       if (url) {
         let length = quill.getSelection().index;
         // 插入图片，res为服务器返回的图片链接地址
-        console.log('---',`${this.Linkurl}${url}`)
         quill.insertEmbed(length, 'image', `${this.Linkurl}${url}`)
         // 调整光标到最后
         quill.setSelection(length + 1)
