@@ -61,6 +61,10 @@ export const GetUserList = (queryParams) => {
 export const CommodityCirculationDDC = (params) => {
   return postRequest(`/api/TurnCommodity/CommodityCirculationDDC?ID=${params}`)
 }
+// 清除H5缓存
+export const RemoveCaches = (params) => {
+  return postRequest(`/api/Cache/RemoveCaches?keyword=${params}`)
+}
 // 商品下架
 export const ManualChain = (params) => {
   return postRequest(`/api/UserCommodityExchanges/ManualChain/?commodityDetailsId=${params}`)
