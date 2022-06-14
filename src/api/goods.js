@@ -5,6 +5,20 @@ import { getRequest, postRequest, putRequest, deleteRequest,postUploadRequest} f
 export const GetSaleModeList = (params) => {
   return getRequest('/api/Dictionary/GetSaleModeList', params)
 }
+
+// 城市数藏excel上传
+export const UploadCommodityAirDropExcel = (commodityID,params) => {
+  return postUploadRequest(`/api/CommodityAirDrop/UploadCommodityAirDropExcel?commodityid=${commodityID}`,params);
+};
+// 城市数藏excel下载
+export const DownloadCommodityAirDropRecord = (commodityID,params) => {
+  return postUploadRequest(`/api/CommodityAirDrop/DownloadCommodityAirDropRecord?commodityid=${commodityID}`,params);
+};
+// 城市数藏excel锁号上传
+export const UploadCommodityLockNumbers = (commodityID,params) => {
+  return postUploadRequest(`/api/Commodity/UploadCommodityLockNumbers?CommodityId=${commodityID}`, params);
+};
+
 // 城市数藏一码多兑附件上传
 export const CreateCommodityDetailsMultiple = (commodityID,params) => {
   return postUploadRequest(`/api/CommodityDetails/CreateCommodityDetailsMultiple?commodityID=${commodityID}`,params);

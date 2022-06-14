@@ -1,10 +1,12 @@
 <template>
 <div>
+
    <table-page :showSearch="showSearch" :expandSearch="expandSearch" @toggleExpand="toggleExpand">
      <!-- 查询条件 -->
      <template slot="search">
        <search @search="handleQuery" @resetQuery="resetQuery"></search>
      </template>
+
      <!-- 表格主体 -->
      <template slot="table">
        <m-table v-loading="loading"  hideRightMenu :data="data" :headers="tableHeaders"
@@ -20,7 +22,11 @@
        @save="save"
        @shelves="shelves"
        @interlinkage="interlinkage"
-       @clearChange="clearChange">
+       @clearChange="clearChange"
+       @uploadExcel="uploadExcel"
+       @downloadExcel="downloadExcel"
+       @upLoadExcelLockNumber="upLoadExcelLockNumber"
+       >
          <template slot="tableMenuLeft">
            <el-button type="primary" size="small" @click="addShop">添加商品</el-button>
          </template>
@@ -55,6 +61,8 @@
       <edit-shop :showAddDialog="showAddDialog" @close="close" :title="title"  @closes="closes" :content="content"></edit-shop>
       <generate :showAddDialogs="showAddDialogs" @close="close" @closes="closes" :commodityID="commodityID"></generate>
       <interlinkage :showAddDialogss="showAddDialogss"  @closeLInk="closeLInk" :params="params"></interlinkage>
+      <uploadExcel :showAddDialogUp="showAddDialogUp" @closeUp="closeUp" @getExcelPath='getExcelPath' :commodityID="commodityID" labelText="空投上传"></uploadExcel>
+      <uploadExcelLN :showAddDialogLN="showAddDialogLN" @closeUp="closeUp" @getExcelPath='getExcelPath' :commodityID="commodityID" lockNumber="lockNumber" labelText="锁号上传"></uploadExcelLN>
    </div>
 </template>
 <script>
@@ -62,10 +70,12 @@ import search from './search'
 import editShop from './editShop'
 import generate from './generate'
 import interlinkage from './interlinkage'
-import { GetCommodityListBack,CommodityOffLine,CommodityOnLine,CommodityCreateUrl,SelloutCommodity } from "@/api/goods.js";
+import uploadExcel from './excel'
+import uploadExcelLN from './excel'
+import { GetCommodityListBack,CommodityOffLine,CommodityOnLine,CommodityCreateUrl,SelloutCommodity,DownloadCommodityAirDropRecord } from "@/api/goods.js";
 import { MessageBox } from 'element-ui'
 export default {
-  components:{search,editShop,generate,interlinkage},
+  components:{search,editShop,generate,interlinkage, uploadExcel, uploadExcelLN},
   data () {
     return {
       params:{
@@ -78,6 +88,8 @@ export default {
       showAddDialogss:false,
       showAddDialog:false,
       showAddDialogs:false,
+      showAddDialogUp: false,
+      showAddDialogLN: false,
       loading:false,
       refreshDom:+new Date(),
       pagination:{
@@ -106,26 +118,26 @@ export default {
           type: 'warning'
         }).then(() => {
           SelloutCommodity(row.ID).then(res=>{
-         if (res.ReturnCode === '200') {
-            this.$message({
-              message: '清仓成功',
-              type: 'success'
-        });
-         this.getList()
-        } else {
-          this.$message({
-              message: '清仓失败',
-              type: 'error'
-        });
-        }
-      })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消清仓'
+           if (res.ReturnCode === '200') {
+              this.$message({
+                message: '清仓成功',
+                type: 'success'
           });
-        });
-    },
+           this.getList()
+          } else {
+            this.$message({
+                message: '清仓失败',
+                type: 'error'
+          });
+          }
+        })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消清仓'
+            });
+          });
+      },
      headError(e) {
         e.target.src = require("@/assets/404.png");
       },
@@ -150,6 +162,12 @@ export default {
       this.showAddDialogss = false
        this.getList()
     },
+    closeUp () {
+      this.params.CommodityID = ''
+      this.showAddDialogUp = false
+      this.showAddDialogLN = false
+      this.getList()
+    },
     // 获取数据
     getList () {
       this.loading = true
@@ -163,16 +181,29 @@ export default {
         GetCommodityListBack(queryParams).then(res=>{
           this.data = res.Data.map(val=>({
           ...val,
-          actions: val.Status === 'online' ? [{label:'下架',handleClickName:'down'},
-          {label:'编辑',handleClickName:'edit'},
-          {label:'查看',handleClickName:'save'},
-          {label:'生成',handleClickName:'generate'},
-          {label:'链接',handleClickName:'interlinkage'},{label:'清仓',handleClickName:'clearChange'}] :[{label:'上架',handleClickName:'shelves'},
-          {label:'编辑',handleClickName:'edit'},
-          {label:'查看',handleClickName:'save'},
-          {label:'生成',handleClickName:'generate'},
-          {label:'链接',handleClickName:'interlinkage'},
-          {label:'清仓',handleClickName:'clearChange'}]
+          actions: val.Status === 'online' ? 
+            [
+              {label:'下架',handleClickName:'down'},
+              {label:'编辑',handleClickName:'edit'},
+              {label:'查看',handleClickName:'save'},
+              {label:'生成',handleClickName:'generate'},
+              {label:'链接',handleClickName:'interlinkage'},
+              {label:'清仓',handleClickName:'clearChange'},
+              {label:'上传',handleClickName:'uploadExcel'},
+              {label:'下载',handleClickName:'downloadExcel'},
+              {label:'锁号',handleClickName:'upLoadExcelLockNumber'},
+            ] :
+            [
+              {label:'上架',handleClickName:'shelves'},
+              {label:'编辑',handleClickName:'edit'},
+              {label:'查看',handleClickName:'save'},
+              {label:'生成',handleClickName:'generate'},
+              {label:'链接',handleClickName:'interlinkage'},
+              {label:'清仓',handleClickName:'clearChange'},
+              {label:'上传',handleClickName:'uploadExcel'},
+              {label:'下载',handleClickName:'downLoadExcel'},
+              {label:'锁号',handleClickName:'upLoadExcelLockNumber'},
+            ]
         }))
           this.loading = false
         })
@@ -228,6 +259,51 @@ export default {
         query: { },
       })
     },
+    
+    uploadExcel(row) {
+      // debugger
+      // alert(this.$refs.uploadBtn)
+      this.commodityID = row.ID
+      this.showAddDialogUp = true
+    },
+
+    upLoadExcelLockNumber(row) {
+      // debugger
+      this.commodityID = row.ID
+      this.showAddDialogLN = true
+    },
+
+    getExcelPath(params){
+      this.excelPath = params.path
+      // this.excelPaths.push(params.commodityID)
+      // alert(this.excelPath)
+    },
+
+    downloadExcel(row){
+      // debugger
+      DownloadCommodityAirDropRecord(row.ID, {commodityID: row.ID}).then( res => {
+        // debugger
+        if (res.ReturnCode === '200') {
+          const file = `${BASE.API_DEV.manager}${res.Data}`
+          this.download(file)
+        } else {
+          this.$message({
+            message: res.ReturnMessage,
+            type: 'error'
+          });
+        }
+      })
+    },
+
+    download  (link) {
+      let DownloadLink = document.createElement('a');
+      DownloadLink.style = 'display: none'; // 创建一个隐藏的a标签
+      DownloadLink.download = 'Excel下载';
+      DownloadLink.href = link;
+      document.body.appendChild(DownloadLink);
+      DownloadLink.click(); // 触发a标签的click事件
+      document.body.removeChild(DownloadLink);
+    },
 
     // 搜索按钮操作
     handleQuery (params) {
@@ -272,12 +348,9 @@ export default {
         {label:'品牌方名称',prop:'BrandName'},
         {label:'系列',prop:'SerialType'},
         {label:'商品图片',prop:'AttachmentList',slot:true},
-        {label:'操作',prop:'actions',fixed:'right',width:250},
+        {label:'操作',prop:'actions',fixed:'right',width:360},
       ]
-    },
-    // tableRowKeys () {
-    //   return code
-    // }
+    }
   }
 }
 </script>
