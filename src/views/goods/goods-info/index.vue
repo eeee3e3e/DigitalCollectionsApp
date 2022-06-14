@@ -108,7 +108,8 @@ export default {
   },
   mounted () {
     this.getList()
-    this.url = BASE.API_DEV.manager
+    console.log('BASE.API_DEV.managerImage',BASE.API_DEV.managerImage)
+    this.url = BASE.API_DEV.managerImage
   },
   methods: {
     clearChange (row) {

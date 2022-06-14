@@ -48,6 +48,14 @@
   <el-form-item label="商品库存" v-if="this.title === '查看商品详情'">
     <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.StockNum"></el-input>
   </el-form-item>
+
+  <el-form-item label="报名开始时间" prop="SignUpStartTime">
+    <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="signUpStart" :value="ruleForm.SignUpStartTime"  placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+  </el-form-item>
+  <el-form-item label="报名结束时间" prop="SignUpEndTime">
+     <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="signUpEnd" :value="ruleForm.SignUpEndTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+  </el-form-item>
+
   <el-form-item label="售卖开始时间" prop="StartDateTime">
     <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="teststart" :value="ruleForm.StartDateTime"  placeholder="选择日期和时间" style="width: 200px"></Date-picker>
   </el-form-item>
@@ -108,7 +116,6 @@
   </el-form-item>
   <el-form-item label="商品视频" prop="">
           <el-upload
-           class="avatar-uploader"
            :disabled="this.title === '查看商品详情'"
             action=""
             :on-progress="uploadVideoProcess"
@@ -166,7 +173,7 @@
   <el-form-item label="描述信息" prop="Description">
   <div class="quill-editor">
     <!-- 图片上传组件辅助，组件内添加v-show=“false”属性，把该组件隐藏起来。-->
-    <el-upload v-show="false" class="avatar-uploader" action name="img" :show-file-list="false" :before-upload="editor_change">
+    <el-upload v-show="false" class="avatar-uploaders" action name="img" :show-file-list="false" :before-upload="editor_change">
     </el-upload>
     <!--富文本编辑器组件-->
     <quill-editor v-model="ruleForm.Description" :disabled="this.title === '查看商品详情'"   :options="editorOption"  ref="QuillEditor"></quill-editor>
@@ -241,7 +248,7 @@ export default {
                 if (value) {
                   console.log('value',value)
                   // 调用element的图片上传组件
-                  document.querySelector('.avatar-uploader input').click()
+                  document.querySelector('.avatar-uploaders input').click()
                 } else {
                   this.quill.format('image', false)
                 }
@@ -284,8 +291,10 @@ export default {
           SerialType:'',
           StartDateTime:'',
           EndDateTime:'',
-          CirculationCoolingPeriod:undefined
+          CirculationCoolingPeriod:undefined,
 
+          SignUpStartTime: '',
+          SignUpEndTime: ''
         },
         rules: {
            SaleModeID: [
@@ -345,7 +354,7 @@ export default {
   mounted () {
     this.GetSaleModeList()
     this.GetCommodityTypeListAll()
-    this.Linkurl = BASE.API_DEV.manager
+    this.Linkurl = BASE.API_DEV.managerImage
   },
   computed: {
 	       editor() {
@@ -365,7 +374,7 @@ export default {
       uploadCity(file.name,fd).then(res=>{
         console.log(res)
         this.ruleForm.AttachmentList.push(res.Data)
-        this.videoForm.showVideoPath = `${BASE.API_DEV.manager}${res.Data}`
+        this.videoForm.showVideoPath = `${BASE.API_DEV.managerImage}${res.Data}`
       })
       }
       this.isShowUploadVideo = false;
@@ -377,7 +386,6 @@ export default {
     },
     //上传成功回调
     handleVideoSuccess(file, fileList) {
-      console.log('上传成功回调',file,fileList)
       this.isShowUploadVideo = true;
       this.videoFlag = false;
       this.videoUploadPercent = 0;
@@ -392,6 +400,12 @@ export default {
       GetCommodityTypeListAll().then(res=>{
         this.optionsCommodityTypeID = res.Data
       })
+    },
+    signUpStart(v) {
+      this.ruleForm.SignUpStartTime = v
+    },
+    signUpEnd(v) {
+      this.ruleForm.SignUpEndTime = v
     },
     teststart (v) {
       this.ruleForm.StartDateTime = v
@@ -423,7 +437,6 @@ export default {
       let fd = new FormData()
       fd.append('files', file.raw)
       uploadCity(file.name,fd).then(res=>{
-
         this.ruleForm.AttachmentList.push(res.Data)
 
       })
@@ -461,7 +474,6 @@ export default {
       if (url) {
         let length = quill.getSelection().index;
         // 插入图片，res为服务器返回的图片链接地址
-        console.log('---',`${this.Linkurl}${url}`)
         quill.insertEmbed(length, 'image', `${this.Linkurl}${url}`)
         // 调整光标到最后
         quill.setSelection(length + 1)
@@ -543,13 +555,13 @@ export default {
           this.AttachmentList = []
           if (this.content.FrontImage !=='') {
             this.FrontImage = [{url:''}]
-             this.FrontImage[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
+             this.FrontImage[0].url = `${BASE.API_DEV.managerImage}${this.content.FrontImage}`
           } else {
             this.FrontImage = []
           }
           if (this.content.FrontImage !=='') {
             this.fhfList = [{url:''}]
-             this.fhfList[0].url = `${BASE.API_DEV.manager}${this.content.FrontImage}`
+             this.fhfList[0].url = `${BASE.API_DEV.managerImage}${this.content.FrontImage}`
           } else {
             this.fhfList = []
           }
@@ -560,9 +572,9 @@ export default {
             this.FrontImage = []
           }
           this.ruleForm.AttachmentList.map(item=>{
-           let urlImage = {url:`${BASE.API_DEV.manager}${item}`}
+           let urlImage = {url:`${BASE.API_DEV.managerImage}${item}`}
            if (item.split('.')[item.split('.').length-1] === 'mp4') {
-              this.videoForm.showVideoPath = `${BASE.API_DEV.manager}${item}`
+              this.videoForm.showVideoPath = `${BASE.API_DEV.managerImage}${item}`
            } else {
               this.AttachmentList.push(urlImage)
            }

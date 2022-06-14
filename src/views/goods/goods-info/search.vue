@@ -15,10 +15,12 @@
     <el-form-item>
       <el-button type="primary" size="small" icon="el-icon-search" @click="handleQuery">查询</el-button>
       <el-button type="primary" size="small" icon="el-icon-delete" @click="resetQuery">重置</el-button>
+      <el-button type="danger" size="small" icon="el-icon-delete" @click="RemoveCaches">清除缓存</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
+import { RemoveCaches } from "@/api/goods.js";
 export default {
   name:'search',
   data () {
@@ -44,6 +46,13 @@ export default {
 
   },
   methods:{
+    // 清除H5页面缓存
+    RemoveCaches () {
+      const keyword = '*'
+      RemoveCaches(keyword).then(res=>{
+
+      })
+    },
     // 查询操作
     handleQuery () {
       this.$emit('search',this.queryParams)
