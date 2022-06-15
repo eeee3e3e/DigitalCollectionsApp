@@ -65,7 +65,7 @@
    <el-form-item label="冷却周期(小时)" prop="CirculationCoolingPeriod">
     <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.CirculationCoolingPeriod"></el-input>
   </el-form-item>
-  <el-form-item label="封面" prop="FrontImage">
+  <el-form-item label="封面" >
     <el-upload
      :disabled="this.title === '查看商品详情'"
             ref="uploads"
@@ -90,7 +90,7 @@
       </el-dialog>
   </el-form-item>
   <div style="color:red;padding-bottom:10px;">*注(单个藏品中的【商品图片、 商品视频】只允许二选一,否则将出错 )</div>
-   <el-form-item label="商品图片" prop="">
+   <el-form-item label="商品图片" >
           <el-upload
            :disabled="this.title === '查看商品详情'"
             ref="upload"
@@ -347,6 +347,12 @@ export default {
           ],
           EndDateTime: [
             {  required: true, message: '请选择日期', trigger: 'blur' }
+          ],
+          SignUpStartTime: [
+            {  required: true, message: '请报名开始日期', trigger: 'blur' }
+          ],
+          SignUpEndTime: [
+            {  required: true, message: '请选报名结束择日期', trigger: 'blur' }
           ]
         }
     }
@@ -519,6 +525,7 @@ export default {
 
     },
     submitForm(formName) {
+      console.log(1111)
         this.$refs[formName].validate((valid) => {
           if (valid) {
             addCommodity(this.ruleForm).then(res=>{
