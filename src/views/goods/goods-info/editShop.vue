@@ -89,7 +89,8 @@
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
   </el-form-item>
-  <div style="color:red;padding-bottom:10px;">*注(单个藏品中的【商品图片、 商品视频】只允许二选一,否则将出错 )</div>
+  <!-- <div style="color:red;padding-bottom:10px;">*注(单个藏品中的【商品图片、 商品文件】只允许二选一,否则将出错 )</div> -->
+  <div style="color:red;padding-bottom:10px;"></div>
    <el-form-item label="商品图片" >
           <el-upload
            :disabled="this.title === '查看商品详情'"
@@ -114,38 +115,20 @@
         <img width="100%" :src="dialogImageUrls" alt="">
       </el-dialog>
   </el-form-item>
-  <el-form-item label="商品视频" prop="">
+  <!-- <el-form-item label="商品文件" prop="">
           <el-upload
-           :disabled="this.title === '查看商品详情'"
-            action=""
-            :on-progress="uploadVideoProcess"
-            :before-upload="beforeUploadVideo"
-            :on-change="handleVideoSuccess"
-            :show-file-list="false"
-            :limit="1"
-        >
-          <video
-     v-if="videoForm.showVideoPath != '' && !videoFlag"
-     :src="videoForm.showVideoPath"
-     class="avatar video-avatar"
-     loop="loop"
-     autoplay="autoplay" muted>
-     您的浏览器不支持视频播放
-      </video>
-     <i v-else-if="videoForm.showVideoPath == '' && !videoFlag"
-     class="el-icon-plus avatar-uploader-icon"
-     ></i>
-     <el-progress v-if="videoFlag == true" type="circle"
-     v-bind:percentage="videoUploadPercent"
-     style="margin-top: 7px"></el-progress>
-        </el-upload>
-        <el-button v-if="this.title !== '查看商品详情'" @click="handleVideo">删除商品视频</el-button>
-           <div>
-            <div style="font-size: 12px;color: #919191;">
-              单次限制上传一个视频且只能上传一个（低于50MB）
-            </div>
-          </div>
-  </el-form-item>
+                ref="upload"
+                action=""
+                :on-change="UploadFile"
+                :on-remove="Removelist"
+                :auto-upload="false"
+                :file-list="glbList"
+                :limit="1"
+                >
+                <el-button size="small" type="primary">点击上传</el-button>
+                <span style="pading-left:5px;">&nbsp;&nbsp;*上传后立即生效</span>
+                </el-upload>
+  </el-form-item> -->
     <!-- <el-form-item label="发行方图片" prop="fhfList">
           <el-upload
            :disabled="this.title === '查看商品详情'"
@@ -218,6 +201,7 @@ export default {
   },
   data () {
     return {
+      glbList:[{name:'GLB文件',url:''}],
        videoFlag: false,
       //是否显示进度条
       videoUploadPercent: "",
@@ -368,6 +352,21 @@ export default {
 	        },
 	    },
   methods:{
+    // 上传glb文件
+    UploadFile(file,filelist) {
+      let fd = new FormData()
+      fd.append('files', file.raw)
+      uploadCity(file.name,fd).then(res=>{
+        console.log(res)
+        this.ruleForm.AttachmentList.push(res.Data)
+      }).catch(res=>{
+        this.ruleForm.AttachmentList = []
+      })
+
+    },
+    Removelist () {
+
+    },
     beforeUploadVideo(file) {
       console.log(file)
       var fileSize = file.size / 1024 / 1024 < 50;   //控制大小  修改50的值即可
@@ -580,8 +579,8 @@ export default {
           }
           this.ruleForm.AttachmentList.map(item=>{
            let urlImage = {url:`${BASE.API_DEV.managerImage}${item}`}
-           if (item.split('.')[item.split('.').length-1] === 'mp4') {
-              this.videoForm.showVideoPath = `${BASE.API_DEV.managerImage}${item}`
+           if (item.split('.')[item.split('.').length-1] === 'glb') {
+              this.glbList[0].url = `${BASE.API_DEV.managerImage}${item}`
            } else {
               this.AttachmentList.push(urlImage)
            }

@@ -272,7 +272,35 @@ util.initRouter = function(vm) {
                 path: '/',
                 title: "用户管理改造",
               }]
-              }
+              },
+              {
+                frontRoute: "null",
+                level: 0,
+                id: "1367039950367700166",
+                name: "user-collection",
+                parentId: "1",
+                path: "null",
+                title: "藏品",
+                children:[{
+                  children: [{
+                    children: [],
+                    frontRoute: "user-collection/index",
+                    id: "1367045529331161112",
+                    name: "user-collection",
+                    level: 2,
+                    parentId: "13670455297211619002",
+                    path: 'user-collection',
+                    title: "藏品列表",
+                  }],
+                  frontRoute: 'Main',
+                  id: "13670455297211619002",
+                  name: "user-collection",
+                  level: 1,
+                  parentId: "1367039950367700166",
+                  path: '/',
+                  title: "用户藏品查询",
+                }]
+                }
       ]
       let menuData = menuDataMock;
       console.log('menuData',menuData)
