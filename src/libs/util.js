@@ -273,36 +273,64 @@ util.initRouter = function(vm) {
                 title: "用户管理改造",
               }]
               },
-        {
-          frontRoute: "null",
-          id: "136704437654319552",
-          level: 0,
-          name: "draw-lots",
-          parentId: "0",
-          path: "null",
-          title: "报名",
-          children:[
-            {
-              frontRoute: 'Main',
-              id: "136704552456711619552",
-              name: "draw-lots-list",
-              level: 1,
-              parentId: "1367035550367700768",
-              path: '/',
-              title: "查看报名人员",
-              children:[
-                {
-                  frontRoute:"draw-lots/index",
-                  id: "1114344376391319552090",
-                  name: "drawLotsListIndex",
-                  parentId: "11170443763913195052",
-                  path: "draw-lots-list-index",
-                  title: "报名列表",
-                  children: [],
+              {
+                frontRoute: "null",
+                id: "136704437654319552",
+                level: 0,
+                name: "draw-lots",
+                parentId: "0",
+                path: "null",
+                title: "报名",
+                children:[
+                  {
+                    frontRoute: 'Main',
+                    id: "136704552456711619552",
+                    name: "draw-lots-list",
+                    level: 1,
+                    parentId: "1367035550367700768",
+                    path: '/',
+                    title: "查看报名人员",
+                    children:[
+                      {
+                        frontRoute:"draw-lots/index",
+                        id: "1114344376391319552090",
+                        name: "drawLotsListIndex",
+                        parentId: "11170443763913195052",
+                        path: "draw-lots-list-index",
+                        title: "报名列表",
+                        children: [],
+                      }]
+                  }
+                ]
+              },
+              {
+                frontRoute: "null",
+                level: 0,
+                id: "1367039950367700166",
+                name: "user-collection",
+                parentId: "1",
+                path: "null",
+                title: "藏品",
+                children:[{
+                  children: [{
+                    children: [],
+                    frontRoute: "user-collection/index",
+                    id: "1367045529331161112",
+                    name: "user-collection",
+                    level: 2,
+                    parentId: "13670455297211619002",
+                    path: 'user-collection',
+                    title: "藏品列表",
+                  }],
+                  frontRoute: 'Main',
+                  id: "13670455297211619002",
+                  name: "user-collection",
+                  level: 1,
+                  parentId: "1367039950367700166",
+                  path: '/',
+                  title: "用户藏品查询",
                 }]
-            }
-          ]
-        }
+                }
       ]
       let menuData = menuDataMock;
       console.log('menuData',menuData)

@@ -71,6 +71,10 @@ export const GetTurnCommodityLogBack = (queryParams) => {
 export const GetUserList = (queryParams) => {
   return getRequest(`/api/UserInfo/GetUserList?mobileNo=${queryParams.mobileNo}&realName=${queryParams.realName}&nickName=${queryParams.nickName}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
 };
+// 城市数藏 用户个人藏品列表
+export const GetMyCommodityDetailsList = (queryParams) => {
+  return getRequest(`/api/CommodityDetails/GetMyCommodityDetailsList?userId=${queryParams.userId}&pageIndex=${queryParams.pageIndex}&pageSize=${queryParams.pageSize}`);
+};
 // 转赠手动上链
 export const CommodityCirculationDDC = (params) => {
   return postRequest(`/api/TurnCommodity/CommodityCirculationDDC?ID=${params}`)

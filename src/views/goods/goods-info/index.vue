@@ -15,6 +15,7 @@
        :limitKey="'pageSize'"
        :pageParams="pageParams"
        :pagination="pagination"
+       @pageChange="pageChange"
        :refreshDom="refreshDom"
        @down="down"
        @edit="edit"
@@ -169,6 +170,11 @@ export default {
       this.showAddDialogLN = false
       this.getList()
     },
+    pageChange (v) {
+      this.pageParams.pageIndex = v.pageIndex
+      this.pageParams.pageSize = v.pageSize
+      this.getList()
+    },
     // 获取数据
     getList () {
       this.loading = true
@@ -182,7 +188,7 @@ export default {
         GetCommodityListBack(queryParams).then(res=>{
           this.data = res.Data.map(val=>({
           ...val,
-          actions: val.Status === 'online' ? 
+          actions: val.Status === 'online' ?
             [
               {label:'下架',handleClickName:'down'},
               {label:'编辑',handleClickName:'edit'},
@@ -207,6 +213,7 @@ export default {
             ]
         }))
           this.loading = false
+          this.pagination.TotalCount = res.TotalCount
         })
     },
     interlinkage (row) {
@@ -260,7 +267,7 @@ export default {
         query: { },
       })
     },
-    
+
     uploadExcel(row) {
       // debugger
       // alert(this.$refs.uploadBtn)
