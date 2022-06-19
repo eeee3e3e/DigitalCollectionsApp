@@ -89,8 +89,8 @@
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
   </el-form-item>
-  <!-- <div style="color:red;padding-bottom:10px;">*注(单个藏品中的【商品图片、 商品文件】只允许二选一,否则将出错 )</div> -->
-  <div style="color:red;padding-bottom:10px;"></div>
+  <div style="color:red;padding-bottom:10px;">*注(单个藏品中的【商品图片、 商品文件】只允许二选一,否则将出错 )</div>
+  <!-- <div style="color:red;padding-bottom:10px;"></div> -->
    <el-form-item label="商品图片" >
           <el-upload
            :disabled="this.title === '查看商品详情'"
@@ -115,7 +115,7 @@
         <img width="100%" :src="dialogImageUrls" alt="">
       </el-dialog>
   </el-form-item>
-  <!-- <el-form-item label="商品文件" prop="">
+  <el-form-item label="商品文件" prop="">
           <el-upload
                 ref="upload"
                 action=""
@@ -128,7 +128,7 @@
                 <el-button size="small" type="primary">点击上传</el-button>
                 <span style="pading-left:5px;">&nbsp;&nbsp;*上传后立即生效</span>
                 </el-upload>
-  </el-form-item> -->
+  </el-form-item>
     <!-- <el-form-item label="发行方图片" prop="fhfList">
           <el-upload
            :disabled="this.title === '查看商品详情'"
@@ -201,7 +201,7 @@ export default {
   },
   data () {
     return {
-      glbList:[{name:'GLB文件',url:''}],
+      glbList:[],
        videoFlag: false,
       //是否显示进度条
       videoUploadPercent: "",
@@ -580,6 +580,7 @@ export default {
           this.ruleForm.AttachmentList.map(item=>{
            let urlImage = {url:`${BASE.API_DEV.managerImage}${item}`}
            if (item.split('.')[item.split('.').length-1] === 'glb') {
+            this.glbList =[{name:'GLB文件',url:''}],
               this.glbList[0].url = `${BASE.API_DEV.managerImage}${item}`
            } else {
               this.AttachmentList.push(urlImage)
