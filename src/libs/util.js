@@ -272,7 +272,37 @@ util.initRouter = function(vm) {
                 path: '/',
                 title: "用户管理改造",
               }]
-              }
+              },
+        {
+          frontRoute: "null",
+          id: "136704437654319552",
+          level: 0,
+          name: "draw-lots",
+          parentId: "0",
+          path: "null",
+          title: "报名",
+          children:[
+            {
+              frontRoute: 'Main',
+              id: "136704552456711619552",
+              name: "draw-lots-list",
+              level: 1,
+              parentId: "1367035550367700768",
+              path: '/',
+              title: "查看报名人员",
+              children:[
+                {
+                  frontRoute:"draw-lots/index",
+                  id: "1114344376391319552090",
+                  name: "drawLotsListIndex",
+                  parentId: "11170443763913195052",
+                  path: "draw-lots-list-index",
+                  title: "报名列表",
+                  children: [],
+                }]
+            }
+          ]
+        }
       ]
       let menuData = menuDataMock;
       console.log('menuData',menuData)

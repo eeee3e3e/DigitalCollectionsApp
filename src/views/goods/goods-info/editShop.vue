@@ -62,6 +62,10 @@
   <el-form-item label="售卖结束时间" prop="EndDateTime">
      <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="testend" :value="ruleForm.EndDateTime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
   </el-form-item>
+  <el-form-item label="活动开始时间" prop="ActivityStartTime">
+     <Date-picker  :disabled="this.title === '查看商品详情'" type="datetime" format="yyyy-MM-dd HH:mm:ss" @on-change="activityTime" :value="ruleForm.ActivityStartTime" placeholder="选择活动开始时间" style="width: 200px"></Date-picker>
+  </el-form-item>
+
    <el-form-item label="冷却周期(小时)" prop="CirculationCoolingPeriod">
     <el-input  :disabled="this.title === '查看商品详情'" v-model="ruleForm.CirculationCoolingPeriod"></el-input>
   </el-form-item>
@@ -294,7 +298,8 @@ export default {
           CirculationCoolingPeriod:undefined,
 
           SignUpStartTime: '',
-          SignUpEndTime: ''
+          SignUpEndTime: '',
+          ActivityStartTime: ''
         },
         rules: {
            SaleModeID: [
@@ -348,12 +353,16 @@ export default {
           EndDateTime: [
             {  required: true, message: '请选择日期', trigger: 'blur' }
           ],
-          SignUpStartTime: [
-            {  required: true, message: '请报名开始日期', trigger: 'blur' }
-          ],
-          SignUpEndTime: [
-            {  required: true, message: '请选报名结束择日期', trigger: 'blur' }
+          ActivityStartTime: [
+            {  required: true, message: '请选择活动开始时间', trigger: 'blur' }
           ]
+          // 报名字段非必填。报名日期有值时，H5端即为 报名抽签 藏品
+          // SignUpStartTime: [
+          //   {  required: true, message: '请报名开始日期', trigger: 'blur' }
+          // ],
+          // SignUpEndTime: [
+          //   {  required: true, message: '请选报名结束择日期', trigger: 'blur' }
+          // ]
         }
     }
   },
@@ -418,6 +427,9 @@ export default {
     },
     testend (v) {
       this.ruleForm.EndDateTime = v
+    },
+    activityTime(v) {
+      this.ruleForm.ActivityStartTime = v
     },
     ////       图片
     //移除图片功能

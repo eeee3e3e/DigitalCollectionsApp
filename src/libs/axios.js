@@ -79,7 +79,8 @@ service.interceptors.response.use(
         }
         break;
       default:
-        return data;
+        // 二进制文件下载
+        return response.config.responseType==='blob'?response:data;
     }
   },
   async error => {
@@ -120,7 +121,7 @@ service.interceptors.response.use(
   }
 );
 
-export const getRequest = (url, params) => {
+export const getRequest = (url, params, responseType) => {
   let accessToken = getStore("accessToken");
   return service({
     method: "get",
@@ -130,7 +131,8 @@ export const getRequest = (url, params) => {
       "Content-Type": "multipart/form-data",
       accessToken: accessToken,
       "Authorization":`authorization ${accessToken}`
-    }
+    },
+    responseType
   });
 };
 export const postUploadRequest = (url, params) =>{
