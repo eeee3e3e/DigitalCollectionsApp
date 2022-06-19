@@ -3,20 +3,20 @@
     <el-col :span="4" :style="{height:this.autoHeight}">
       <el-card ref="listNav" style="border:1px solid #ccc;width:100%;height:100%;overflow:scroll;padding: 0 16px 16px;margin-top:16px;box-sizing: border-box;">
         <ul class="ul">
-          <li v-for="(item,index) in Navdata" 
-            :key="index" 
+          <li v-for="(item,index) in Navdata"
+            :key="index"
             :class="{ 'active':item.ID==current}"
             @click="addactive(item)">{{item.Name}}
           </li>
         </ul>
       </el-card>
       <div style="text-align:center">
-        <el-pagination 
-          small 
+        <el-pagination
+          small
           layout="prev, pager, next"
           :page-size="pageParamsNav.pageSize"
-          :total="total" 
-          @size-change="handleSizeChange" 
+          :total="total"
+          @size-change="handleSizeChange"
           @current-change="handleCurrentChange">
         </el-pagination>
       </div>
@@ -48,9 +48,9 @@
           </el-form>
         </template>
         <template slot="table">
-          <m-table 
-            v-loading="loading"  
-            hideRightMenu 
+          <m-table
+            v-loading="loading"
+            hideRightMenu
             :data="data"
 
             :rowKey="+new Date() + ''"
@@ -164,6 +164,7 @@ export default {
           res.Data.map((item)=>{
             this.data.push(item)
           })
+          this.pagination.TotalCount = res.TotalCount || 0
         }
       })
       .catch((error)=>{
