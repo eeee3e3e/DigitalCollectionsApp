@@ -603,7 +603,7 @@ export default {
           // console
           this.dialogVisible = true
         } else {
-
+          this.glbList= []
           this.FrontImage = []
           this.AttachmentList = []
           this.fhfList = []
