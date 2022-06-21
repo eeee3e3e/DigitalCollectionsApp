@@ -542,6 +542,7 @@ export default {
             addCommodity(this.ruleForm).then(res=>{
               this.dialogVisible = false
                this.$emit('close')
+               this.glbList= []
 
             })
           } else {
@@ -612,6 +613,7 @@ export default {
             if (i !== 'AttachmentList') {
               this.ruleForm[i] = ''
               this.ruleForm.AttachmentList = []
+              this.fhfList = []
             }
           }
           this.dialogVisible = true
