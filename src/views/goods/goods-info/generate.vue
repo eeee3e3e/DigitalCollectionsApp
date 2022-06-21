@@ -91,7 +91,7 @@ export default {
                this.ruleForm.CommodityID = ''
                 this.dialogVisible = false
                 this.updateStatus = false
-                const file = `${BASE.API_DEV.manager}${res.Data}`
+                const file = `${BASE.API_DEV.managerImage}${res.Data}`
                this.download('一码一兑',file)
                 this.$emit('closes')
             } else {
