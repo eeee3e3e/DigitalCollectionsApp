@@ -59,8 +59,8 @@ export default {
         }
     }
   },
-  mounted() { 
-    // debugger 
+  mounted() {
+    // debugger
     console.log(this.labelText)
   },
   methods:{
@@ -73,7 +73,7 @@ export default {
       console.log(file,filelist)
 
       // alert(this.lockNumber);
-    //       debugger 
+    //       debugger
     // console.log(this.labelText)
     // console.log(this.lockNumber)
       if(this.lockNumber == "lockNumber" ){
@@ -81,7 +81,7 @@ export default {
 
         UploadCommodityLockNumbers(this.commodityID,fd).then(res=>{
           if (res.ReturnCode === '200') {
-            const file = `${BASE.API_DEV.manager}${res.Data}`
+            const file = `${BASE.API_DEV.managerImage}${res.Data}`
             this.$message({
               message: '上传成功',
               type: 'success'
@@ -101,7 +101,7 @@ export default {
         UploadCommodityAirDropExcel(this.commodityID,fd).then(res=>{
           // debugger
           if (res.ReturnCode === '200') {
-            const file = `${BASE.API_DEV.manager}${res.Data}`
+            const file = `${BASE.API_DEV.managerImage}${res.Data}`
             this.$message({
               message: '上传成功',
               type: 'success'
@@ -117,7 +117,7 @@ export default {
         }).catch( res => {} )
 
       }
-      
+
     },
 
     download(filename, link) {

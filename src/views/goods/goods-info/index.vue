@@ -292,7 +292,7 @@ export default {
       DownloadCommodityAirDropRecord(row.ID, {commodityID: row.ID}).then( res => {
         // debugger
         if (res.ReturnCode === '200') {
-          const file = `${BASE.API_DEV.manager}${res.Data}`
+          const file = `${BASE.API_DEV.managerImage}${res.Data}`
           this.download(file)
         } else {
           this.$message({

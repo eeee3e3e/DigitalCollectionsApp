@@ -125,7 +125,7 @@ export default {
                 message: '一码多兑成功',
                 type: 'success'
           });
-          const file = `${BASE.API_DEV.manager}${res.Data}`
+          const file = `${BASE.API_DEV.managerImage}${res.Data}`
           this.download('一码多兑',file)
           // this.$router.push('/exchange/double')
         }else {

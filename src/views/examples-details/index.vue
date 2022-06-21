@@ -122,7 +122,7 @@ export default {
       return [
         {label:'商品ID',prop:'CommodityID'},
         {label:'商品编号',prop:'CommodityNo'},
-        {label:'DDCID',prop:'DDCID'},
+        {label:'DDCID',prop:'OutDDCID'},
         {label:'商品名称',prop:'CommodityName'},
         {label:'转赠人姓名',prop:'OutUserInfoRealName'},
         {label:'转赠人手机号',prop:'OutUserInfoMobileNo'},
