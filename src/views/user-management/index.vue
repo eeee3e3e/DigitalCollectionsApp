@@ -55,7 +55,7 @@ export default {
   },
   mounted () {
     this.getList()
-    this.url = BASE.API_DEV.manager
+    this.url = BASE.API_DEV.managerImage
   },
   methods: {
      headError(e) {
