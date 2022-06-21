@@ -374,7 +374,8 @@ export default {
 
     },
     Removelist () {
-
+      this.ruleForm.AttachmentList= []
+      this.glbList= []
     },
     beforeUploadVideo(file) {
       console.log(file)
